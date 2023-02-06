@@ -59,3 +59,5 @@ vfd --help
 By default the `vfd`-script will use [traefik](https://github.com/traefik/traefik) as a reverse proxy for the services. For example, the `access-to-finland-demo-front` service will be available at `http://app-access-to-finland-demo-front.localhost` after bringing up the services.
 
 The traefik dashboard should be available at `http://localhost:8081`. The generated hostnames of different services can be found from there with a syntax: `Host(<service-name>.localhost)`.
+
+Disable the traefik setup by setting the `VFD_USE_TRAEFIK` environment variable to `false` or by using the `--no-traefik` command-line argument.

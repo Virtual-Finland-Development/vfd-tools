@@ -21,9 +21,9 @@ SERVICES=(
 	#"JobsInFinland.Api.Productizer"
 )
 
-# Argument variables
+# Commandline/input argument variables
 _argument_services=""
-_disable_traefik=0
+_use_traefik=${VFD_USE_TRAEFIK:-true}
 
 # parse input arguments
 while [[ $# -gt 0 ]]; do
@@ -61,8 +61,8 @@ while [[ $# -gt 0 ]]; do
 			shift
 			shift
 			;;
-		--disable-traefik)
-			_disable_traefik=1
+		--no-traefik)
+			_use_traefik=false
 			shift
 			;;
 		--help|-h)
@@ -74,7 +74,7 @@ while [[ $# -gt 0 ]]; do
 			echo "  list|list-services: Lists the known services"
 			echo "  --services: Comma separated list of services to start/stop/status/restart"
 			echo "  --workdir: Path to the root of the services folders"
-			echo "  --disable-traefik: Disables traefik"
+			echo "  --no-traefik: Disables traefik"
 			echo "  --help|-h: Shows this help"
 			exit 0
 			;;
@@ -127,7 +127,7 @@ fi
 ##
 if [ ${should_engage_primary_loop} -eq 1 ]; then
 
-	if [ ${_disable_traefik} -eq 0 ]; then
+	if [ "${_use_traefik}" = true ]; then
 		# Run traefik
 		echo "Running 'docker compose ${DOCKER_COMPOSE_COMMAND}' for traefik"
 		docker compose -f ${PROJECT_ROOT_PATH}/docker-compose.traefik.yml ${DOCKER_COMPOSE_COMMAND}
