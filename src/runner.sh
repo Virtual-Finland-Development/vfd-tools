@@ -23,7 +23,7 @@ SERVICES=(
 
 # Argument variables
 _argument_services=""
-_enable_traefik=0
+_disable_traefik=0
 
 # parse input arguments
 while [[ $# -gt 0 ]]; do
@@ -45,6 +45,10 @@ while [[ $# -gt 0 ]]; do
 			DOCKER_COMPOSE_COMMAND="ps"
 			shift
 			;;
+		list|list-services)
+			printf '%s\n' "${SERVICES[@]}"
+			exit 0
+			;;
 		--services)
 			_argument_services="$2"
 			IFS=',' read -ra argument_services_array <<< "$_argument_services"
@@ -57,24 +61,26 @@ while [[ $# -gt 0 ]]; do
 			shift
 			shift
 			;;
-		--enable-traefik)
-			_enable_traefik=1
+		--disable-traefik)
+			_disable_traefik=1
 			shift
 			;;
 		--help|-h)
-			echo "Usage: runner.sh [start|stop|status]"
+			echo "Usage: runner.sh <command> [--services service1,service2] [--workdir path/to/services] ..."
 			echo "  start|up: Starts the services"
 			echo "  stop|down: Stops the services"
 			echo "  status|ps: Shows the status of the services"
 			echo "  restart: Restarts the services"
-			echo "  --services: Comma separated list of services"
+			echo "  list|list-services: Lists the known services"
+			echo "  --services: Comma separated list of services to start/stop/status/restart"
 			echo "  --workdir: Path to the root of the services folders"
-			echo "  --enable-traefik: Enables traefik"
+			echo "  --disable-traefik: Disables traefik"
 			echo "  --help|-h: Shows this help"
 			exit 0
 			;;
 		*)
 			echo "Unknown argument: $key"
+			echo "Use --help for usage"
 			exit 1
 			;;
 	esac
@@ -121,7 +127,7 @@ fi
 ##
 if [ ${should_engage_primary_loop} -eq 1 ]; then
 
-	if [ ${_enable_traefik} -eq 1 ]; then
+	if [ ${_disable_traefik} -eq 0 ]; then
 		# Run traefik
 		echo "Running 'docker compose ${DOCKER_COMPOSE_COMMAND}' for traefik"
 		docker compose -f ${PROJECT_ROOT_PATH}/docker-compose.traefik.yml ${DOCKER_COMPOSE_COMMAND}

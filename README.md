@@ -10,18 +10,32 @@ Controller for different docker-compose files located in the project folders
 
 #### Usage
 
+If need be, set the projects root directory with the `VFD_PROJECTS_ROOT` environment variable or with cli arguments. By default it is set to `../`.
+
+Examples:
+
+- Print usage:
+
 ```bash
 ./bin/vfd --help
 ```
 
-If need be, set the projects root directory with the `VFD_PROJECTS_ROOT` environment variable or with cli arguments. By default it is set to `../`.
-
-Example:
-
-Bring all services up:
+- Bring all services up:
 
 ```bash
 ./bin/vfd up
+```
+
+- Bring all services down:
+
+```bash
+./bin/vfd down
+```
+
+- Bring specific services up:
+
+```bash
+./bin/vfd up --services users-api,authentication-gw
 ```
 
 ### Shell shortuct setup
