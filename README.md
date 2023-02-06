@@ -38,7 +38,7 @@ Bring specific services up:
 ./bin/vfd up --services users-api,authentication-gw
 ```
 
-### Shell shortuct setup
+### Shell shortcut setup
 
 Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
 
