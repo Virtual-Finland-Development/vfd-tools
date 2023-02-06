@@ -59,6 +59,7 @@ while [[ $# -gt 0 ]]; do
 			echo "  start|up: Starts the services"
 			echo "  stop|down: Stops the services"
 			echo "  status|ps: Shows the status of the services"
+			echo "  restart: Restarts the services"
 			echo "  --services: Comma separated list of services"
 			echo "  --workdir: Path to the root of the services folders"
 			echo "  --help|-h: Shows this help"
