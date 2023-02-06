@@ -6,11 +6,13 @@ Project development tools related to Virtual Finland Development (VFD) environme
 
 ### **vfd** - a commander script (src/runner.sh)
 
-A shell script for contolling docker-compose files located in separate project folders. The script will look for docker-compose files in the projects root directory and bring up/down the services defined in them.
+A shell script for contolling docker-compose files located in separate vfd-project folders.
 
 #### **Usage:**
 
-If need be, set the projects root directory with the `VFD_PROJECTS_ROOT` environment variable or with command-line arguments. By default it is set to `../`.
+The script will look for docker-compose files in the vfd-projects root directory and bring up/down the services defined in them.
+
+If need be, set the vfd-projects root directory with the `VFD_PROJECTS_ROOT` environment variable or with command-line option: `--workdir path/to/services`. By default the services root is set to the parent folder (`../`) of the `vfd-tools` project.
 
 ##### **Examples:**
 
