@@ -4,7 +4,7 @@ Project development tools related to Virtual Finland Development (VFD) environme
 
 ## Scripts
 
-### `vfd (src/runner.sh)`
+### `vfd`-commander (src/runner.sh)
 
 Shell script for contolling docker-compose files located in separate project folders
 
