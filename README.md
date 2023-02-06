@@ -8,11 +8,11 @@ Project development tools related to Virtual Finland Development (VFD) environme
 
 Shell script for contolling docker-compose files located in separate project folders
 
-#### Usage
+#### **Usage:**
 
 If need be, set the projects root directory with the `VFD_PROJECTS_ROOT` environment variable or with command-line arguments. By default it is set to `../`.
 
-##### Examples:
+##### **Examples:**
 
 Print usage:
 
@@ -53,3 +53,9 @@ Restart your shell or source the profile file, then you can use the `vfd` as a g
 ```bash
 vfd --help
 ```
+
+## Traefik setup
+
+By default the `vfd`-script will use [traefik](https://github.com/traefik/traefik) as a reverse proxy for the services. For example, the `access-to-finland-demo-front` service will be available at `http://app-access-to-finland-demo-front.localhost` after bringing up the services.
+
+The traefik dashboard should be available at `http://localhost:8081`. The generated hostnames of different services can be found from there with a syntax: `Host(<service-name>.localhost)`.
