@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.9
+    # Enables the web UI and tells Traefik to listen to docker
+    command:
+      - --log.level=DEBUG
+      #- --entrypoints.websecure.address=:443
+      - --entrypoints.web.address=:80
+      #- --entrypoints.traefik.address=:8081
+      - --providers.docker=true
+      - --providers.docker.defaultRule=Host(`{{ normalize .Name }}.localhost`)
+      - --api.insecure=true
+    network_mode: host
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:
+      - host.docker.internal:host-gateway

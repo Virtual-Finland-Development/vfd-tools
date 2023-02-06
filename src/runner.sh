@@ -3,10 +3,10 @@
 # The script assumes that the services folders are located in the relative parent folder of this script
 # The service folders must contain a docker-compose.yml file
 #
-
+PROJECT_ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" >/dev/null 2>&1 && pwd )"
+VFD_PROJECTS_ROOT=${VFD_PROJECTS_ROOT:-"${PROJECT_ROOT_PATH}/../"}
 ARCH=$(uname -m)
 DOCKER_COMPOSE_COMMAND=""
-VFD_PROJECTS_ROOT=${VFD_PROJECTS_ROOT:-..}
 
 # Known services
 SERVICES=(
@@ -20,7 +20,10 @@ SERVICES=(
 	#"tmt-productizer"
 	#"JobsInFinland.Api.Productizer"
 )
+
+# Argument variables
 _argument_services=""
+_enable_traefik=0
 
 # parse input arguments
 while [[ $# -gt 0 ]]; do
@@ -54,6 +57,10 @@ while [[ $# -gt 0 ]]; do
 			shift
 			shift
 			;;
+		--enable-traefik)
+			_enable_traefik=1
+			shift
+			;;
 		--help|-h)
 			echo "Usage: runner.sh [start|stop|status]"
 			echo "  start|up: Starts the services"
@@ -62,6 +69,7 @@ while [[ $# -gt 0 ]]; do
 			echo "  restart: Restarts the services"
 			echo "  --services: Comma separated list of services"
 			echo "  --workdir: Path to the root of the services folders"
+			echo "  --enable-traefik: Enables traefik"
 			echo "  --help|-h: Shows this help"
 			exit 0
 			;;
@@ -112,6 +120,13 @@ fi
 # Engage
 ##
 if [ ${should_engage_primary_loop} -eq 1 ]; then
+
+	if [ ${_enable_traefik} -eq 1 ]; then
+		# Run traefik
+		echo "Running 'docker compose ${DOCKER_COMPOSE_COMMAND}' for traefik"
+		docker compose -f ${PROJECT_ROOT_PATH}/docker-compose.traefik.yml ${DOCKER_COMPOSE_COMMAND}
+	fi
+
 	# Run docker compose for each service
 	for SERVICE in "${SERVICES[@]}"; do
 		echo "Running 'docker compose ${DOCKER_COMPOSE_COMMAND}' for ${SERVICE}"
@@ -122,6 +137,8 @@ if [ ${should_engage_primary_loop} -eq 1 ]; then
 				export USERAPI_DOCKERFILE="Dockerfile.arm64"
 			fi
 		fi
+		
+		# Run docker compose
 		docker compose -f ${VFD_PROJECTS_ROOT}/${SERVICE}/docker-compose.yml ${DOCKER_COMPOSE_COMMAND}
 	done
 fi 
