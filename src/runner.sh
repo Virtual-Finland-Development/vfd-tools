@@ -34,6 +34,10 @@ while [[ $# -gt 0 ]]; do
 			DOCKER_COMPOSE_COMMAND="down"
 			shift
 			;;
+		restart)
+			DOCKER_COMPOSE_COMMAND="restart"
+			shift
+			;;
 		status|ps)
 			DOCKER_COMPOSE_COMMAND="ps"
 			shift
