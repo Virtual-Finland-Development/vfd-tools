@@ -60,6 +60,20 @@ vfd --help
 
 By default the `vfd`-script will use [traefik](https://github.com/traefik/traefik) as a reverse proxy for the services. For example, the `access-to-finland-demo-front` service will be available at `http://app-access-to-finland-demo-front.localhost` after bringing up the services.
 
-The traefik dashboard should be available at `http://localhost:8081`. The generated hostnames of different services can be found from there with a syntax: `Host(<service-name>.localhost)`.
+The traefik dashboard should be available at `http://localhost:8081`. The generated hostnames of different services can be found from there with a default syntax: `Host(<service-name>-<project-name>.localhost)`.
+
+The service host can be changed at project-level by adding a traefik label to the service in the `docker-compose.yml` file. For example:
+
+```yaml
+services:
+    demoApp:
+    ...
+    labels:
+        - traefik.http.routers.demoApp.rule=Host(`demoApp.localhost`)
+```
+
+In the above example the `demoApp` is a reference to the service name and `demoApp.localhost` is the hostname of the service.
+
+### Disabling traefik
 
 Disable the traefik setup by setting the `VFD_USE_TRAEFIK` environment variable to `false` or by using the `--no-traefik` command-line argument.
