@@ -43,53 +43,47 @@ while [[ $# -gt 0 ]]; do
 	value=${2}
 
 	# If key is an option and includes an equal sign, then split it into key and value
-	if [[ ${key} == *"--"* ]] && [[ ${key} == *"="* ]]; then
-		value=${key#*=}
-		key=${key%%=*}
+	if [[ ${key} == *"--"* ]]; then
+
+		if [[ ${key} == *"="* ]]; then
+			value=${key#*=}
+			key=${key%%=*}
+		else
+			shift # move to next argument
+		fi
 	fi 
+	shift
 
 	case ${key} in
 		start|up)
 			_argument_command_spec="up -d"
-			shift
 			;;
 		stop|down)
 			_argument_command_spec="down"
-			shift
 			;;
 		restart)
 			_argument_command_spec="restart"
-			shift
 			;;
 		status|ps)
 			_argument_command_spec="ps"
-			shift
 			;;
 		logs)
 			_argument_command_spec='logs --tail=20'
-			shift
 			;;
 		list|list-services)
 			_argument_command="list-services"
-			shift
 			;;
 		list-traefik-hosts)
 			_argument_command="list-traefik-hosts"
-			shift
 			;;
 		--services)
 			_argument_services="${value}"
-			shift
-			shift
 			;;
 		--workdir)
 			VFD_PROJECTS_ROOT="${value}"
-			shift
-			shift
 			;;
 		--no-traefik)
 			_use_traefik=false
-			shift
 			;;
 		--help|-h)
 			echo "Usage: runner.sh <command> [--services service1,service2] [--workdir path/to/services] ..."
