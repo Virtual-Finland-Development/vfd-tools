@@ -200,4 +200,25 @@ if [ ${should_engage_final_status_check} -eq 1 ]; then
 	echo ""
 	echo "> Status of the services:"
 	docker ps
+
+	if [[ "${docker_compose_command}" == "up"* ]]; then
+		if [ "${_use_traefik}" = true ]; then
+			echo ""
+			echo "> Traefik dashboard: http://localhost:8081"
+
+			# If jq and curl installed
+			if command -v jq &> /dev/null && command -v curl &> /dev/null; then
+				# Get the traefik dashboard api
+				trafick_hosts=$(curl -s http://localhost:8081/api/rawdata | jq -r '.routers[].rule | select(. | contains("Host(")) | split("Host(`") | .[1] | split("`") | .[0]')
+
+				# If traefik dashboard api is not empty
+				if [ ! -z "${trafick_hosts}" ]; then
+					echo "> Hosts:"
+					echo "${trafick_hosts}" | while read -r line; do
+						echo "  http://${line}"
+					done
+				fi
+			fi
+		fi
+	fi
 fi
