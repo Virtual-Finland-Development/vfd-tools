@@ -27,8 +27,16 @@ _use_traefik=${VFD_USE_TRAEFIK:-true}
 
 # parse input arguments
 while [[ $# -gt 0 ]]; do
-	key="$1"
-	case $key in
+	key=${1}
+	value=${2}
+
+	# If key is an option and includes an equal sign, then split it into key and value
+	if [[ ${key} == *"--"* ]] && [[ ${key} == *"="* ]]; then
+		value=${key#*=}
+		key=${key%%=*}
+	fi 
+
+	case ${key} in
 		start|up)
 			DOCKER_COMPOSE_COMMAND="up -d"
 			shift
@@ -50,14 +58,14 @@ while [[ $# -gt 0 ]]; do
 			exit 0
 			;;
 		--services)
-			_argument_services="$2"
+			_argument_services="${value}"
 			IFS=',' read -ra argument_services_array <<< "$_argument_services"
 			SERVICES=("${argument_services_array[@]}")
 			shift
 			shift
 			;;
 		--workdir)
-			VFD_PROJECTS_ROOT="$2"
+			VFD_PROJECTS_ROOT="${value}"
 			shift
 			shift
 			;;
@@ -79,7 +87,7 @@ while [[ $# -gt 0 ]]; do
 			exit 0
 			;;
 		*)
-			echo "Unknown argument: $key"
+			echo "Unknown argument: ${key}"
 			echo "Use --help for usage"
 			exit 1
 			;;
