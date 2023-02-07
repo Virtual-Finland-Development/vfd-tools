@@ -1,0 +1,11 @@
+VFD_SERVICES=(
+	"authentication-gw"
+	"users-api"
+	"testbed-api"
+	"external-service-demo"
+	"access-to-finland-demo-front"
+	"status-info-api"
+	"status-admin"
+	#"tmt-productizer"
+	#"JobsInFinland.Api.Productizer"
+)

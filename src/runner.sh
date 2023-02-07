@@ -8,22 +8,10 @@ VFD_PROJECTS_ROOT=${VFD_PROJECTS_ROOT:-"${PROJECT_ROOT_PATH}/../"}
 ARCH=$(uname -m)
 DOCKER_COMPOSE_COMMAND=""
 
-# Known services
-SERVICES=(
-	"authentication-gw"
-	"users-api"
-	"testbed-api"
-	"external-service-demo"
-	"access-to-finland-demo-front"
-	"status-info-api"
-	"status-admin"
-	#"tmt-productizer"
-	#"JobsInFinland.Api.Productizer"
-)
-
 # Commandline/input argument variables
 _argument_services=""
 _use_traefik=${VFD_USE_TRAEFIK:-true}
+_argument_command="docker-compose"
 
 # parse input arguments
 while [[ $# -gt 0 ]]; do
@@ -54,13 +42,11 @@ while [[ $# -gt 0 ]]; do
 			shift
 			;;
 		list|list-services)
-			printf '%s\n' "${SERVICES[@]}"
-			exit 0
+			_argument_command="list-services"
+			shift
 			;;
 		--services)
 			_argument_services="${value}"
-			IFS=',' read -ra argument_services_array <<< "$_argument_services"
-			SERVICES=("${argument_services_array[@]}")
 			shift
 			shift
 			;;
@@ -101,8 +87,27 @@ then
 	exit 1
 fi
 
+
+# Prepare the services array
+if [ -z ${_argument_services} ]; then
+	source ${PROJECT_ROOT_PATH}/env.services.sh
+	if [ -z ${VFD_SERVICES} ]; then
+		echo "VFD_SERVICES is not set in env.services.sh"
+		exit 1
+	fi
+else
+	IFS=',' read -ra argument_services_array <<< "$_argument_services"
+	VFD_SERVICES=("${argument_services_array[@]}")
+
+	if [ ${#VFD_SERVICES[@]} -eq 0 ]; then
+		echo "No services specified"
+		exit 1
+	fi
+fi
+
+
 # Validate that the services folders exist
-for SERVICE in "${SERVICES[@]}"; do
+for SERVICE in "${VFD_SERVICES[@]}"; do
 	if [ ! -d "${VFD_PROJECTS_ROOT}/${SERVICE}" ]; then
 		echo "Service folder not found: ${VFD_PROJECTS_ROOT}/${SERVICE}"
 		exit 1
@@ -112,6 +117,26 @@ for SERVICE in "${SERVICES[@]}"; do
 		exit 1
 	fi
 done
+
+##
+# Run argument commands
+##
+if [ "${_argument_command}" = "list-services" ]; then
+	echo "Known services:"
+	for SERVICE in "${VFD_SERVICES[@]}"; do
+		echo "  ${SERVICE}"
+	done
+	exit 0
+fi
+
+if [ "${_argument_command}" != "docker-compose" ]; then
+	echo "Unknown argument command: ${_argument_command}"
+	exit 1
+fi
+
+##
+# Run docker commands
+##
 
 # Prep for execution
 should_engage_primary_loop=1
@@ -142,7 +167,7 @@ if [ ${should_engage_primary_loop} -eq 1 ]; then
 	fi
 
 	# Run docker compose for each service
-	for SERVICE in "${SERVICES[@]}"; do
+	for SERVICE in "${VFD_SERVICES[@]}"; do
 		echo "Running 'docker compose ${DOCKER_COMPOSE_COMMAND}' for ${SERVICE}"
 		# Exception for users-api
 		if [ ${SERVICE} = "users-api" ]; then
