@@ -6,12 +6,13 @@
 PROJECT_ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" >/dev/null 2>&1 && pwd )"
 VFD_PROJECTS_ROOT=${VFD_PROJECTS_ROOT:-"${PROJECT_ROOT_PATH}/../"}
 ARCH=$(uname -m)
-DOCKER_COMPOSE_COMMAND=""
 
 # Commandline/input argument variables
 _argument_services=""
 _use_traefik=${VFD_USE_TRAEFIK:-true}
 _argument_command="docker-compose"
+_argument_command_spec=""
+
 
 # parse input arguments
 while [[ $# -gt 0 ]]; do
@@ -26,19 +27,23 @@ while [[ $# -gt 0 ]]; do
 
 	case ${key} in
 		start|up)
-			DOCKER_COMPOSE_COMMAND="up -d"
+			_argument_command_spec="up -d"
 			shift
 			;;
 		stop|down)
-			DOCKER_COMPOSE_COMMAND="down"
+			_argument_command_spec="down"
 			shift
 			;;
 		restart)
-			DOCKER_COMPOSE_COMMAND="restart"
+			_argument_command_spec="restart"
 			shift
 			;;
 		status|ps)
-			DOCKER_COMPOSE_COMMAND="ps"
+			_argument_command_spec="ps"
+			shift
+			;;
+		logs)
+			_argument_command_spec='logs --tail=20'
 			shift
 			;;
 		list|list-services)
@@ -64,6 +69,7 @@ while [[ $# -gt 0 ]]; do
 			echo "  start|up: Starts the services"
 			echo "  stop|down: Stops the services"
 			echo "  status|ps: Shows the status of the services"
+			echo "  logs: Shows part of the logs of the services"
 			echo "  restart: Restarts the services"
 			echo "  list|list-services: Lists the known services"
 			echo "  --services: Comma separated list of services to start/stop/status/restart"
@@ -141,9 +147,10 @@ fi
 # Prep for execution
 should_engage_primary_loop=1
 should_engage_final_status_check=1
+docker_compose_command=${_argument_command_spec}
 
 # Check for special case commands
-if [ "${DOCKER_COMPOSE_COMMAND}" = "ps" ]; then
+if [ "${docker_compose_command}" = "ps" ]; then
 	if [ -z ${_argument_services} ]; then
 		# If no services were specified, then we don't need to run the primary loop
 		should_engage_primary_loop=0
@@ -155,6 +162,12 @@ if [ "${DOCKER_COMPOSE_COMMAND}" = "ps" ]; then
 	fi
 fi
 
+# If command starts with "logs", then we don't need to run the final status check
+if [[ "${docker_compose_command}" == "logs"* ]]; then
+	should_engage_final_status_check=0
+	_use_traefik=false
+fi
+
 ##
 # Engage
 ##
@@ -162,13 +175,13 @@ if [ ${should_engage_primary_loop} -eq 1 ]; then
 
 	if [ "${_use_traefik}" = true ]; then
 		# Run traefik
-		echo "Running 'docker compose ${DOCKER_COMPOSE_COMMAND}' for traefik"
-		docker compose -f ${PROJECT_ROOT_PATH}/docker-compose.traefik.yml ${DOCKER_COMPOSE_COMMAND}
+		echo "Running 'docker compose ${docker_compose_command}' for traefik"
+		docker compose -f ${PROJECT_ROOT_PATH}/docker-compose.traefik.yml ${docker_compose_command}
 	fi
 
 	# Run docker compose for each service
 	for SERVICE in "${VFD_SERVICES[@]}"; do
-		echo "Running 'docker compose ${DOCKER_COMPOSE_COMMAND}' for ${SERVICE}"
+		echo "Running 'docker compose ${docker_compose_command}' for ${SERVICE}"
 		# Exception for users-api
 		if [ ${SERVICE} = "users-api" ]; then
 			# If OS architecture is arm64, use the arm64 version of the users-api
@@ -178,7 +191,7 @@ if [ ${should_engage_primary_loop} -eq 1 ]; then
 		fi
 		
 		# Run docker compose
-		docker compose -f ${VFD_PROJECTS_ROOT}/${SERVICE}/docker-compose.yml ${DOCKER_COMPOSE_COMMAND}
+		docker compose -f ${VFD_PROJECTS_ROOT}/${SERVICE}/docker-compose.yml ${docker_compose_command}
 	done
 fi 
 
