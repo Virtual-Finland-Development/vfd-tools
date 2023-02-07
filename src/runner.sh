@@ -13,6 +13,29 @@ _use_traefik=${VFD_USE_TRAEFIK:-true}
 _argument_command="docker-compose"
 _argument_command_spec=""
 
+###
+# Helper functions
+###
+function print_traefik_hosts_info() {
+	echo ""
+	echo "> Traefik dashboard: http://localhost:8081"
+
+	# If jq and curl installed
+	if command -v jq &> /dev/null && command -v curl &> /dev/null; then
+		# Fetch the hosts from traefik
+		trafick_hosts=$(curl -s http://localhost:8081/api/rawdata | jq -r '.routers[].rule | select(. | contains("Host(")) | split("Host(`") | .[1] | split("`") | .[0]')
+		if [ ! -z "${trafick_hosts}" ]; then
+			echo "> Hosts:"
+			echo "${trafick_hosts}" | while read -r line; do
+				echo "  http://${line}"
+			done
+		fi
+	fi
+}
+
+###
+# Main
+###
 
 # parse input arguments
 while [[ $# -gt 0 ]]; do
@@ -50,6 +73,10 @@ while [[ $# -gt 0 ]]; do
 			_argument_command="list-services"
 			shift
 			;;
+		list-traefik-hosts)
+			_argument_command="list-traefik-hosts"
+			shift
+			;;
 		--services)
 			_argument_services="${value}"
 			shift
@@ -72,6 +99,7 @@ while [[ $# -gt 0 ]]; do
 			echo "  logs: Shows part of the logs of the services"
 			echo "  restart: Restarts the services"
 			echo "  list|list-services: Lists the known services"
+			echo "  list-traefik-hosts: Lists traeffik hosts (if service up)"
 			echo "  --services: Comma separated list of services to start/stop/status/restart"
 			echo "  --workdir: Path to the root of the services folders"
 			echo "  --no-traefik: Disables traefik"
@@ -132,6 +160,11 @@ if [ "${_argument_command}" = "list-services" ]; then
 	for SERVICE in "${VFD_SERVICES[@]}"; do
 		echo "  ${SERVICE}"
 	done
+	exit 0
+fi
+
+if [ "${_argument_command}" = "list-traefik-hosts" ]; then
+	print_traefik_hosts_info
 	exit 0
 fi
 
@@ -203,20 +236,7 @@ if [ ${should_engage_final_status_check} -eq 1 ]; then
 
 	if [[ "${docker_compose_command}" == "up"* ]]; then
 		if [ "${_use_traefik}" = true ]; then
-			echo ""
-			echo "> Traefik dashboard: http://localhost:8081"
-
-			# If jq and curl installed
-			if command -v jq &> /dev/null && command -v curl &> /dev/null; then
-				# Fetch the hosts from traefik
-				trafick_hosts=$(curl -s http://localhost:8081/api/rawdata | jq -r '.routers[].rule | select(. | contains("Host(")) | split("Host(`") | .[1] | split("`") | .[0]')
-				if [ ! -z "${trafick_hosts}" ]; then
-					echo "> Hosts:"
-					echo "${trafick_hosts}" | while read -r line; do
-						echo "  http://${line}"
-					done
-				fi
-			fi
+			print_traefik_hosts_info
 		fi
 	fi
 fi
