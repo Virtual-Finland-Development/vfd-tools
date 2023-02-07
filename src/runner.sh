@@ -208,10 +208,8 @@ if [ ${should_engage_final_status_check} -eq 1 ]; then
 
 			# If jq and curl installed
 			if command -v jq &> /dev/null && command -v curl &> /dev/null; then
-				# Get the traefik dashboard api
+				# Fetch the hosts from traefik
 				trafick_hosts=$(curl -s http://localhost:8081/api/rawdata | jq -r '.routers[].rule | select(. | contains("Host(")) | split("Host(`") | .[1] | split("`") | .[0]')
-
-				# If traefik dashboard api is not empty
 				if [ ! -z "${trafick_hosts}" ]; then
 					echo "> Hosts:"
 					echo "${trafick_hosts}" | while read -r line; do
