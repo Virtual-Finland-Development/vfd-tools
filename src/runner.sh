@@ -10,8 +10,9 @@ ARCH=$(uname -m)
 # Commandline/input argument variables
 _argument_services=""
 _use_traefik=${VFD_USE_TRAEFIK:-true}
-_argument_command="docker-compose"
+_argument_command=""
 _argument_command_spec=""
+_argument_command_extra_args_array=()
 
 ###
 # Helper functions
@@ -41,11 +42,12 @@ function print_traefik_hosts_info() {
 while [[ $# -gt 0 ]]; do
 	key=${1}
 	value=${2}
+	value_specified=false
 
 	# If key is an option and includes an equal sign, then split it into key and value
 	if [[ ${key} == *"--"* ]]; then
-
 		if [[ ${key} == *"="* ]]; then
+			value_specified=true
 			value=${key#*=}
 			key=${key%%=*}
 		else
@@ -56,24 +58,29 @@ while [[ $# -gt 0 ]]; do
 
 	case ${key} in
 		start|up)
+			_argument_command="docker-compose"
 			_argument_command_spec="up -d"
 			;;
 		stop|down)
+			_argument_command="docker-compose"
 			_argument_command_spec="down"
 			;;
 		restart)
+			_argument_command="docker-compose"
 			_argument_command_spec="restart"
 			;;
 		status|ps)
+			_argument_command="docker-compose"
 			_argument_command_spec="ps"
 			;;
 		logs)
+			_argument_command="docker-compose"
 			_argument_command_spec='logs --tail=20'
 			;;
 		list|list-services)
 			_argument_command="list-services"
 			;;
-		list-traefik-hosts)
+		list-hosts|list-traefik-hosts)
 			_argument_command="list-traefik-hosts"
 			;;
 		--services)
@@ -93,7 +100,7 @@ while [[ $# -gt 0 ]]; do
 			echo "  logs: Shows part of the logs of the services"
 			echo "  restart: Restarts the services"
 			echo "  list|list-services: Lists the known services"
-			echo "  list-traefik-hosts: Lists traeffik hosts (if service up)"
+			echo "  list-hosts|list-traefik-hosts: Lists traeffik hosts (if service up)"
 			echo "  --services: Comma separated list of services to start/stop/status/restart"
 			echo "  --workdir: Path to the root of the services folders"
 			echo "  --no-traefik: Disables traefik"
@@ -101,12 +108,20 @@ while [[ $# -gt 0 ]]; do
 			exit 0
 			;;
 		*)
-			echo "Unknown argument: ${key}"
-			echo "Use --help for usage"
-			exit 1
+			if [ value_specified = true ]; then
+				_argument_command_extra_args_array+=("${key}=${value}")
+			else
+				_argument_command_extra_args_array+=("${key}")
+			fi
 			;;
 	esac
 done
+
+if [ -z ${_argument_command} ]; then
+	echo "No command specified"
+	echo "Use --help for usage"
+	exit 1
+fi
 
 # Check that docker is installed
 if ! command -v docker &> /dev/null
@@ -218,7 +233,7 @@ if [ ${should_engage_primary_loop} -eq 1 ]; then
 		fi
 		
 		# Run docker compose
-		docker compose -f ${VFD_PROJECTS_ROOT}/${SERVICE}/docker-compose.yml ${docker_compose_command}
+		docker compose -f ${VFD_PROJECTS_ROOT}/${SERVICE}/docker-compose.yml ${docker_compose_command} ${_argument_command_extra_args_array[@]}
 	done
 fi 
 
@@ -230,6 +245,7 @@ if [ ${should_engage_final_status_check} -eq 1 ]; then
 
 	if [[ "${docker_compose_command}" == "up"* ]]; then
 		if [ "${_use_traefik}" = true ]; then
+			sleep 3 # Give services a moment to start
 			print_traefik_hosts_info
 		fi
 	fi
