@@ -10,7 +10,19 @@ A shell script for contolling docker-compose files located in separate vfd-proje
 
 #### **Requirements**
 
+#### Traefik requirements
+
 For listing hostnames of the services, the script requires the `jq` and `curl` command-line tools to be installed.
+
+#### Docker requirements
+
+If using docker compose, the following network must be created: `vfd-network`.
+
+Create the network with the following command:
+
+```
+docker network create vfd-network
+```
 
 #### **Usage:**
 
