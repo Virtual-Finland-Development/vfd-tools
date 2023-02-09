@@ -8,7 +8,7 @@ Project development tools related to Virtual Finland Development (VFD) environme
 
 A shell script for contolling docker-compose files located in separate vfd-project folders.
 
-### **Requirements**
+#### **Requirements**
 
 For listing hostnames of the services, the script requires the `jq` and `curl` command-line tools to be installed.
 
