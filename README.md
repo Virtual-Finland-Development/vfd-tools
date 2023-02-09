@@ -40,6 +40,12 @@ Bring specific services up:
 ./bin/vfd up --services users-api,authentication-gw
 ```
 
+Tail the logs of specific services of a project:
+
+```bash
+vfd logs --services=authentication-gw authgw -f
+```
+
 ### Shell shortcut setup
 
 Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
