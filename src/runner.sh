@@ -34,6 +34,10 @@ function print_traefik_hosts_info() {
 	fi
 }
 
+function ensure_docker_network() {
+	docker network create vfd-network &> /dev/null
+}
+
 ###
 # Main
 ###
@@ -215,6 +219,9 @@ fi
 ##
 if [ ${should_engage_primary_loop} -eq 1 ]; then
 
+	# ensure docker net
+	ensure_docker_network
+
 	if [ "${_use_traefik}" = true ]; then
 		# Run traefik
 		echo "Running 'docker compose ${docker_compose_command}' for traefik"
@@ -245,7 +252,7 @@ if [ ${should_engage_final_status_check} -eq 1 ]; then
 
 	if [[ "${docker_compose_command}" == "up"* ]]; then
 		if [ "${_use_traefik}" = true ]; then
-			sleep 3 # Give services a moment to start
+			sleep 2 # Give services a moment to start
 			print_traefik_hosts_info
 		fi
 	fi
