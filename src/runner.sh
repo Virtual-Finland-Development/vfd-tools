@@ -31,6 +31,8 @@ function print_traefik_hosts_info() {
 				echo "  http://${line}"
 			done
 		fi
+	else
+		echo "> Install jq and curl to see the traefik hosts"
 	fi
 }
 
@@ -96,9 +98,17 @@ while [[ $# -gt 0 ]]; do
 		--no-traefik)
 			_use_traefik=false
 			;;
+		--no-detach)
+			if [ "${_argument_command_spec}" == "up -d" ]; then
+				_argument_command_spec="up"
+			else
+				echo "Invalid option: --no-detach"
+				exit 1
+			fi
+			;;
 		--help|-h)
 			echo "Usage: runner.sh <command> [--services service1,service2] [--workdir path/to/services] ..."
-			echo "  start|up: Starts the services"
+			echo "  start|up [--no-detach]: Starts the services"
 			echo "  stop|down: Stops the services"
 			echo "  status|ps: Shows the status of the services"
 			echo "  logs: Shows part of the logs of the services"
@@ -133,7 +143,6 @@ then
 	echo "Docker could not be found"
 	exit 1
 fi
-
 
 # Prepare the services array
 if [ -z ${_argument_services} ]; then
@@ -223,9 +232,14 @@ if [ ${should_engage_primary_loop} -eq 1 ]; then
 	ensure_docker_network
 
 	if [ "${_use_traefik}" = true ]; then
-		# Run traefik
-		echo "Running 'docker compose ${docker_compose_command}' for traefik"
-		docker compose -f ${PROJECT_ROOT_PATH}/docker-compose.traefik.yml ${docker_compose_command}
+		# Run traefik on ups or downs
+		if [[ "${docker_compose_command}" == "up"* ]]; then
+			echo "Bringing traefik up.."
+			docker compose -f ${PROJECT_ROOT_PATH}/docker-compose.traefik.yml up -d
+		elif [[ "${docker_compose_command}" == "down"* ]]; then
+			echo "Bringing traefik down.."
+			docker compose -f ${PROJECT_ROOT_PATH}/docker-compose.traefik.yml down
+		fi
 	fi
 
 	# Run docker compose for each service

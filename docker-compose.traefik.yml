@@ -12,11 +12,14 @@ services:
       - --entrypoints.traefik.address=:8081
       - --providers.docker=true
       - --providers.docker.defaultRule=Host(`{{ normalize .Name }}.localhost`)
+      - --providers.file.directory=/etc/traefik/dynamic_conf
       - --api
       - --api.insecure=true # enables the web UI at port 8081
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      - certs:/etc/ssl/traefik
+      - ./config/traefik:/etc/traefik/dynamic_conf:ro
     networks:
       - vfd-network
     ports:
@@ -27,7 +30,16 @@ services:
       # Fix for linux hosts
       - host.docker.internal:host-gateway
 
+  traefik-certs-helper:
+    image: frapsoft/openssl
+    entrypoint: /bin/ash -c '[ ! -f /etc/ssl/traefik/cert.key ] && openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/traefik/cert.key -out /etc/ssl/traefik/cert.crt -days 365 -nodes -subj "/CN=*.localhost/O=Virtual Finland/OU=Virtual Finland Development" || true'
+    volumes:
+      - certs:/etc/ssl/traefik
+
 networks:
   vfd-network:
     driver: bridge
     external: true
+
+volumes:
+  certs:
