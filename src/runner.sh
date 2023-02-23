@@ -6,9 +6,11 @@
 PROJECT_ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" >/dev/null 2>&1 && pwd )"
 VFD_PROJECTS_ROOT=${VFD_PROJECTS_ROOT:-"${PROJECT_ROOT_PATH}/../"}
 ARCH=$(uname -m)
+source ${PROJECT_ROOT_PATH}/env.services.sh
 
 # Commandline/input argument variables
-_argument_services=""
+_argument_primary_services=""
+_argument_secondary_services=""
 _use_traefik=${VFD_USE_TRAEFIK:-true}
 _argument_command=""
 _argument_command_spec=""
@@ -90,7 +92,14 @@ while [[ $# -gt 0 ]]; do
 			_argument_command="list-traefik-hosts"
 			;;
 		--services)
-			_argument_services="${value}"
+			_argument_primary_services="${value}"
+			;;
+		--secondary-services)
+			_argument_secondary_services="${value}"
+			;;
+		--all)
+			_argument_primary_services=$(IFS=, ; echo "${VFD_SERVICES[*]}")
+			_argument_secondary_services=$(IFS=, ; echo "${VFD_EXTRA_SERVICES[*]}")
 			;;
 		--workdir)
 			VFD_PROJECTS_ROOT="${value}"
@@ -116,6 +125,8 @@ while [[ $# -gt 0 ]]; do
 			echo "  list|list-services: Lists the known services"
 			echo "  list-hosts|list-traefik-hosts: Lists traeffik hosts (if service up)"
 			echo "  --services: Comma separated list of services to start/stop/status/restart"
+			echo "  --secondary-services: Comma separated list of extra services to start/stop/status/restart"
+			echo "  --all: Starts primary and secondary services"
 			echo "  --workdir: Path to the root of the services folders"
 			echo "  --no-traefik: Disables traefik"
 			echo "  --help|-h: Shows this help"
@@ -145,20 +156,25 @@ then
 fi
 
 # Prepare the services array
-if [ -z ${_argument_services} ]; then
-	source ${PROJECT_ROOT_PATH}/env.services.sh
+if [ -z ${_argument_primary_services} ]; then
 	if [ -z ${VFD_SERVICES} ]; then
 		echo "VFD_SERVICES is not set in env.services.sh"
 		exit 1
 	fi
 else
-	IFS=',' read -ra argument_services_array <<< "$_argument_services"
+	IFS=',' read -ra argument_services_array <<< "$_argument_primary_services"
 	VFD_SERVICES=("${argument_services_array[@]}")
 
 	if [ ${#VFD_SERVICES[@]} -eq 0 ]; then
 		echo "No services specified"
 		exit 1
 	fi
+fi
+
+# Append extra services
+if [ ! -z ${_argument_secondary_services} ]; then
+	IFS=',' read -ra argument_extra_services_array <<< "$_argument_secondary_services"
+	VFD_SERVICES+=("${argument_extra_services_array[@]}")
 fi
 
 
@@ -206,7 +222,7 @@ docker_compose_command=${_argument_command_spec}
 
 # Check for special case commands
 if [ "${docker_compose_command}" = "ps" ]; then
-	if [ -z ${_argument_services} ]; then
+	if [ -z ${_argument_primary_services} ]; then
 		# If no services were specified, then we don't need to run the primary loop
 		should_engage_primary_loop=0
 		should_engage_final_status_check=1

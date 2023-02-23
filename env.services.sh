@@ -4,8 +4,12 @@ VFD_SERVICES=(
 	"testbed-api"
 	"external-service-demo"
 	"access-to-finland-demo-front"
+	#"living-in-finland"
 	"status-info-api"
 	"status-admin"
-	#"tmt-productizer"
-	#"JobsInFinland.Api.Productizer"
+)
+
+VFD_EXTRA_SERVICES=(
+	"tmt-productizer"
+	"JobsInFinland.Api.Productizer"
 )
