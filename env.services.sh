@@ -4,7 +4,7 @@ VFD_SERVICES=(
 	"testbed-api"
 	"external-service-demo"
 	"access-to-finland-demo-front"
-	#"living-in-finland"
+	"living-in-finland"
 	"status-info-api"
 	"status-admin"
 )
