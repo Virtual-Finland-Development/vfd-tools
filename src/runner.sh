@@ -68,6 +68,9 @@ while [[ $# -gt 0 ]]; do
 		init)
 			_argument_command="init"
 			;;
+		git-pull)
+			_argument_command="git-pull"
+			;;
 		start|up)
 			_argument_command="docker-compose"
 			_argument_command_spec="up -d"
@@ -121,6 +124,7 @@ while [[ $# -gt 0 ]]; do
 		--help|-h)
 			echo "Usage: runner.sh <command> [--services service1,service2] [--workdir path/to/services] ..."
 			echo "  init: git clone the project folders if they don't exist"
+			echo "  git-pull: git pull the project folders"
 			echo "  start|up [--no-detach]: Starts the services"
 			echo "  stop|down: Stops the services"
 			echo "  status|ps: Shows the status of the services"
@@ -228,14 +232,22 @@ if [ "${_argument_command}" = "list-traefik-hosts" ]; then
 	exit 0
 fi
 
-if [ "${_argument_command}" != "docker-compose" ]; then
-	echo "Unknown argument command: ${_argument_command}"
-	exit 1
+if [ "${_argument_command}" = "git-pull" ]; then
+	echo "Git pulling service folders.."
+	for SERVICE in "${VFD_SERVICES[@]}"; do
+		echo "> Pulling: ${SERVICE}.."
+		git -C "${VFD_PROJECTS_ROOT}/${SERVICE}" pull
+	done
+	exit 0
 fi
 
 ##
 # Run docker commands
 ##
+if [ "${_argument_command}" != "docker-compose" ]; then
+	echo "Unknown argument command: ${_argument_command}"
+	exit 1
+fi
 
 # Prep for execution
 should_engage_primary_loop=1
