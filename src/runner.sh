@@ -6,7 +6,7 @@
 PROJECT_ROOT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" >/dev/null 2>&1 && pwd )"
 VFD_PROJECTS_ROOT=${VFD_PROJECTS_ROOT:-"${PROJECT_ROOT_PATH}/../"}
 ARCH=$(uname -m)
-source ${PROJECT_ROOT_PATH}/env.services.sh
+source ${PROJECT_ROOT_PATH}/env.config.sh
 
 # Commandline/input argument variables
 _argument_primary_services=""
@@ -65,6 +65,9 @@ while [[ $# -gt 0 ]]; do
 	shift
 
 	case ${key} in
+		init)
+			_argument_command="init"
+			;;
 		start|up)
 			_argument_command="docker-compose"
 			_argument_command_spec="up -d"
@@ -117,6 +120,7 @@ while [[ $# -gt 0 ]]; do
 			;;
 		--help|-h)
 			echo "Usage: runner.sh <command> [--services service1,service2] [--workdir path/to/services] ..."
+			echo "  init: git clone the project folders if they don't exist"
 			echo "  start|up [--no-detach]: Starts the services"
 			echo "  stop|down: Stops the services"
 			echo "  status|ps: Shows the status of the services"
@@ -177,6 +181,24 @@ if [ ! -z ${_argument_secondary_services} ]; then
 	VFD_SERVICES+=("${argument_extra_services_array[@]}")
 fi
 
+if [ "${_argument_command}" = "init" ]; then
+	echo "Initializing service folders.."
+
+	if [ -z "${VFD_GIT_URL}" ]; then
+		echo "VFD_GIT_URL is not set in env.services.sh"
+		exit 1
+	fi
+
+	for SERVICE in "${VFD_SERVICES[@]}"; do
+		if [ ! -d "${VFD_PROJECTS_ROOT}/${SERVICE}" ]; then
+			echo "Trying to git clone: ${VFD_PROJECTS_ROOT}/${SERVICE}"
+			git clone "${VFD_GIT_URL}/${SERVICE}.git" "${VFD_PROJECTS_ROOT}/${SERVICE}"
+		fi
+	done
+
+	echo "Done"
+	exit 0
+fi
 
 # Validate that the services folders exist
 for SERVICE in "${VFD_SERVICES[@]}"; do
