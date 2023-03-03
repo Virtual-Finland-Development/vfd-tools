@@ -7,6 +7,7 @@ VFD_SERVICES=(
 	"living-in-finland"
 	"status-info-api"
 	"status-admin"
+	"codesets"
 )
 
 VFD_EXTRA_SERVICES=(
