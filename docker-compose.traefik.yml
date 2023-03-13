@@ -32,6 +32,7 @@ services:
 
   traefik-certs-helper:
     image: frapsoft/openssl
+    platform: linux/amd64
     entrypoint: /bin/ash -c '[ ! -f /etc/ssl/traefik/cert.key ] && openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/traefik/cert.key -out /etc/ssl/traefik/cert.crt -days 365 -nodes -subj "/CN=*.localhost/O=Virtual Finland/OU=Virtual Finland Development" || true'
     volumes:
       - certs:/etc/ssl/traefik
