@@ -65,11 +65,14 @@ while [[ $# -gt 0 ]]; do
 	shift
 
 	case ${key} in
-		init)
-			_argument_command="init"
+		init|git-clone)
+			_argument_command="git-clone"
 			;;
 		git-pull)
 			_argument_command="git-pull"
+			;;
+		git-status)
+			_argument_command="git-status"
 			;;
 		start|up)
 			_argument_command="docker-compose"
@@ -123,8 +126,9 @@ while [[ $# -gt 0 ]]; do
 			;;
 		--help|-h)
 			echo "Usage: runner.sh <command> [--services service1,service2] [--workdir path/to/services] ..."
-			echo "  init: git clone the project folders if they don't exist"
+			echo "  init|git-clone: git clone the project folders if they don't exist"
 			echo "  git-pull: git pull the project folders"
+			echo "  git-status: git status the project folders"
 			echo "  start|up [--no-detach]: Starts the services"
 			echo "  stop|down: Stops the services"
 			echo "  status|ps: Shows the status of the services"
@@ -185,7 +189,7 @@ if [ ! -z ${_argument_secondary_services} ]; then
 	VFD_SERVICES+=("${argument_extra_services_array[@]}")
 fi
 
-if [ "${_argument_command}" = "init" ]; then
+if [ "${_argument_command}" = "git-clone" ]; then
 	echo "Initializing service folders.."
 
 	if [ -z "${VFD_GIT_URL}" ]; then
@@ -237,6 +241,15 @@ if [ "${_argument_command}" = "git-pull" ]; then
 	for SERVICE in "${VFD_SERVICES[@]}"; do
 		echo "> Pulling: ${SERVICE}.."
 		git -C "${VFD_PROJECTS_ROOT}/${SERVICE}" pull
+	done
+	exit 0
+fi
+
+if [ "${_argument_command}" = "git-status" ]; then
+	echo "Git checking service folder statuses.."
+	for SERVICE in "${VFD_SERVICES[@]}"; do
+		echo "> Checking: ${SERVICE}.."
+		git -C "${VFD_PROJECTS_ROOT}/${SERVICE}" status
 	done
 	exit 0
 fi
