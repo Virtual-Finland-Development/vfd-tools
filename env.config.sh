@@ -13,6 +13,7 @@ VFD_SERVICES=(
 VFD_EXTRA_SERVICES=(
 	"tmt-productizer"
 	"JobsInFinland.Api.Productizer"
+	"prh-mock"
 )
 
 VFD_GIT_URL="git@github.com:Virtual-Finland-Development"
