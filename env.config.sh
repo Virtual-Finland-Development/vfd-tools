@@ -8,12 +8,12 @@ VFD_SERVICES=(
 	"status-info-api"
 	"status-admin"
 	"codesets"
+	"prh-mock"
 )
 
 VFD_EXTRA_SERVICES=(
 	"tmt-productizer"
 	"JobsInFinland.Api.Productizer"
-	"prh-mock"
 )
 
 VFD_GIT_URL="git@github.com:Virtual-Finland-Development"
