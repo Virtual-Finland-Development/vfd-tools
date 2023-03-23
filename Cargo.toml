@@ -1,0 +1,25 @@
+[package]
+name = "vfd-tools"
+version = "0.1.0"
+edition = "2021"
+
+#build = "src/build.rs"
+[[bin]]
+name = "vfd-tools"
+path = "src/main.rs"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.70"
+clap = { version = "4.1.11", features = ["derive"] }
+serde = "1.0.158"
+serde_derive = "1.0.158"
+serde_json = "1.0.94"
+
+[build-dependencies]
+anyhow = "1.0.70"
+clap = "4.1.11"
+clap_complete = "4.1.5"
+clap_generate = "3.0.3"

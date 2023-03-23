@@ -1,0 +1,32 @@
+{
+  "profiles": [
+    {
+      "name": "access-to-finland",
+      "services": [
+        "authentication-gw",
+        "users-api",
+        "testbed-api",
+        "external-service-demo",
+        "access-to-finland-demo-front",
+        "status-info-api",
+        "status-admin",
+        "codesets",
+        "tmt-productizer",
+        "JobsInFinland.Api.Productizer"
+      ]
+    },
+    {
+      "name": "virtual-finland",
+      "services": ["authentication-gw", "testbed-api", "virtual-finland", "codesets", "prh-mock"]
+    },
+    {
+      "name": "external-service-demo",
+      "services": ["authentication-gw", "users-api", "testbed-api", "external-service-demo", "status-info-api", "status-admin", "codesets"]
+    },
+    {
+      "name": "status-admin",
+      "services": ["authentication-gw", "status-info-api", "status-admin"]
+    }
+  ],
+  "vfd-ssh-git": "git@github.com:Virtual-Finland-Development"
+}
