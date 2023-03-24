@@ -1,4 +1,4 @@
-use super::cli::CliArguments;
+use super::CliArguments;
 use anyhow::Result;
 use clap::{Command as ClapCommand, CommandFactory};
 use clap_complete::{generate, Generator};
