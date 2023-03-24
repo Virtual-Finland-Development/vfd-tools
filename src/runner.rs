@@ -15,19 +15,33 @@ impl Runner {
     pub fn run(&self) -> Result<()> {
         if self.args.test {
             println!("test");
-            let mut command_parts = "docker compose ps".split(' ');
-            let primary_command = command_parts.next().unwrap();
-            Command::new(primary_command)
-                .args(command_parts)
-                .stdout(Stdio::inherit())
-                .spawn()
-                .expect("Failed to execute docker compose");
+            for profile in self.settings.profiles.iter() {
+                println!("Running command for profile: {}", profile.name);
+                for service in profile.services.iter() {
+                    self.run_command(&format!(
+                        "docker compose -f ../{}/docker-compose.yml ps",
+                        service
+                    ))?;
+                }
+            }
         }
 
         if self.args.fest {
             println!("fest");
             println!("{:?}", self.settings);
         }
+        Ok(())
+    }
+
+    fn run_command(&self, command: &str) -> Result<()> {
+        let mut command_parts = command.split(' ');
+        let primary_command = command_parts.next().unwrap();
+        Command::new(primary_command)
+            .args(command_parts)
+            .stdout(Stdio::inherit())
+            .stderr(Stdio::inherit())
+            .spawn()?
+            .wait()?;
         Ok(())
     }
 }
