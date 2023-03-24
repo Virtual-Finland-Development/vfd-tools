@@ -2,8 +2,8 @@ use super::CliArguments;
 use anyhow::Result;
 use clap::{Command as ClapCommand, CommandFactory};
 use clap_complete::{generate, Generator};
-use std::io;
 use std::process::{Command, Stdio};
+use std::{fs, io};
 
 fn print_completions<G: Generator>(gen: G, cmd: &mut ClapCommand) {
     generate(gen, cmd, cmd.get_name().to_string(), &mut io::stdout());
@@ -38,6 +38,11 @@ impl Runner {
 
         if self.args.fest {
             println!("fest");
+            let contents =
+                fs::read_to_string("./settings.json").expect("Failed to read settings.json");
+
+            let configuration: serde_json::Value = serde_json::from_str(contents.as_str())?;
+            println!("{:?}", configuration);
         }
         Ok(())
     }
