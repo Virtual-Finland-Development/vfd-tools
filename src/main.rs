@@ -24,6 +24,7 @@ mod settings;
 fn main() -> Result<()> {
     let args = CliArguments::parse();
 
+    // Shell auto-complete generator
     if let Some(generator) = args.generator {
         let mut cmd = CliArguments::command();
         let name = cmd.get_name().to_string();
@@ -31,6 +32,7 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
+    // Application logic
     let settings = settings::get_settings();
-    runner::Runner::new(args, settings).run()
+    runner::run(args, settings)
 }
