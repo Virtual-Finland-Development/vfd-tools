@@ -1,4 +1,4 @@
-use crate::{CliArguments, Settings};
+use crate::{settings::Settings, CliArguments};
 use anyhow::Result;
 use std::process::{Command, Stdio};
 
