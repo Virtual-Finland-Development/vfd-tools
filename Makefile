@@ -1,3 +1,5 @@
 
 build:
-	cargo build --release --target-dir bin
+	cargo build --release
+install: build
+	cp target/release/vfd ./bin/vfd
