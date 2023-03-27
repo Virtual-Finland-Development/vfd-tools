@@ -2,7 +2,7 @@
 
 Project development tools related to Virtual Finland Development (VFD) environment.
 
-### **vfd** - a commander script (src/runner.rs)
+### **vfd** - a commander script (src/main.rs)
 
 A script for contolling docker-compose files located in separate vfd-project folders.
 
