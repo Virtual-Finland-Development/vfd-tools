@@ -2,21 +2,32 @@
 
 Project development tools related to Virtual Finland Development (VFD) environment.
 
-## Scripts
+### **vfd** - a commander script (src/runner.rs)
 
-### **vfd** - a commander script (src/runner.sh)
+A script for contolling docker-compose files located in separate vfd-project folders.
 
-A shell script for contolling docker-compose files located in separate vfd-project folders.
+#### **Build requirements**
 
-#### **Requirements**
+The script is written in Rust but and needs to be compiled with the Rust toolchain, but for convenience a makefile with a dockerized build environment is provided and as such the only requirement is to have `docker` and `make` installed:
 
-#### Traefik requirements
+- docker - https://docs.docker.com/get-docker/
+- make - https://www.gnu.org/software/make/
+
+#### **Install**
+
+```bash
+make install
+```
+
+#### **Runtime requirements**
+
+##### Traefik requirements
 
 For listing hostnames of the services, the script requires the `jq` and `curl` command-line tools to be installed.
 
-#### Docker requirements
+##### Docker requirements
 
-If using docker compose, the following network must be created: `vfd-network`.
+The following network must be created: `vfd-network`.
 
 Create the network with the following command:
 
