@@ -21,7 +21,8 @@ pub struct CliArguments {
 mod runner;
 mod settings;
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let args = CliArguments::parse();
 
     // Shell auto-complete generator
@@ -34,5 +35,5 @@ fn main() -> Result<()> {
 
     // Application logic
     let settings = settings::get_settings();
-    runner::run(args, settings)
+    runner::run(args, settings).await
 }
