@@ -1,5 +1,5 @@
 use anyhow::Result;
-use clap::{command, CommandFactory, Parser};
+use clap::{command, CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell};
 use std::io;
 
@@ -13,9 +13,16 @@ pub struct CliArguments {
     #[arg(long = "generate", value_enum)]
     pub generator: Option<Shell>,
     #[arg(long, short)]
-    pub test: bool,
-    #[arg(long, short)]
-    pub fest: bool,
+    pub profiles: Option<String>,
+    #[command(subcommand)]
+    command: Option<Commands>,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    Up {},
+    Down {},
+    Ps {},
 }
 
 mod runner;
@@ -23,10 +30,10 @@ mod settings;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args = CliArguments::parse();
+    let cli = CliArguments::parse();
 
     // Shell auto-complete generator
-    if let Some(generator) = args.generator {
+    if let Some(generator) = cli.generator {
         let mut cmd = CliArguments::command();
         let name = cmd.get_name().to_string();
         generate(generator, &mut cmd, name, &mut io::stdout());
@@ -34,6 +41,6 @@ async fn main() -> Result<()> {
     }
 
     // Application logic
-    let settings = settings::get_settings();
-    runner::run(args, settings).await
+    let settings = settings::get_settings(&cli);
+    runner::run(&cli, settings).await
 }

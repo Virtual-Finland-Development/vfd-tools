@@ -116,3 +116,7 @@ Disable the traefik setup by setting the `VFD_USE_TRAEFIK` environment variable 
 - the authentication-gw service will report an `authentication-gw-caddy` container error of ports being already in use on startup, this is expected and can be ignored
   - the caddy might be later departed from the authentication-gw service with traefik being used as a reverse proxy instead
 - with Windows subsystem for linux (WSL 2), there seems to be some networking issues when restarting the traefik container often, this should be fixable by restarting the WSL 2 instance (eg. `wsl --shutdown`) or by restarting the computer
+
+# Resources
+
+- https://docs.rs/clap/latest/clap/_derive/_tutorial/index.html
