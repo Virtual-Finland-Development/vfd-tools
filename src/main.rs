@@ -1,5 +1,5 @@
 use anyhow::Result;
-use clap::{command, CommandFactory, Parser, Subcommand};
+use clap::{arg, command, CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell};
 use std::io;
 
@@ -10,7 +10,7 @@ use std::io;
 #[command(about = "Engages in activities", long_about = None)]
 pub struct CliArguments {
     // If provided, outputs the completion file for given shell
-    #[arg(long = "generate", value_enum)]
+    #[arg(long = "generate", value_enum, hide = true)]
     pub generator: Option<Shell>,
     #[arg(long, short)]
     pub profiles: Option<String>,
@@ -20,9 +20,32 @@ pub struct CliArguments {
 
 #[derive(Subcommand)]
 enum Commands {
+    #[command(visible_alias = "start")]
     Up {},
+    #[command(visible_alias = "stop")]
     Down {},
+    #[command(visible_alias = "status")]
     Ps {},
+    Restart {},
+    Logs {},
+    #[command(visible_alias = "list-hosts")]
+    List {},
+    #[command(about = "Runs a git commandline command")]
+    Git {
+        #[command(subcommand)]
+        command: GitCommands,
+    },
+}
+
+#[derive(Subcommand)]
+enum GitCommands {
+    Status {},
+    Pull {},
+    Push {},
+    Commit {
+        #[arg(long, short)]
+        message: Option<String>,
+    },
 }
 
 mod runner;

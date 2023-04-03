@@ -60,8 +60,9 @@ pub async fn print_traefik_hosts_info() {
 
     let hosts = fetch_info().await.unwrap_or_else(|_| Vec::new());
     if !hosts.is_empty() {
+        println!("Hosts:");
         for host in hosts {
-            println!("> Host: http://{}", host);
+            println!("> http://{}", host);
         }
     } else {
         println!("No traefik hosts found");
