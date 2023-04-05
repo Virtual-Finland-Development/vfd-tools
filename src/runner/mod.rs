@@ -1,25 +1,30 @@
 use crate::{settings::Settings, CliArguments, Commands, GitCommands};
 use anyhow::Result;
+mod commander;
 mod utils;
 
+use self::commander::{Command, Commander};
+
 pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
+    let commander = Commander::new(settings);
+
     match &cli.command {
         Some(Commands::Up {}) => {
             utils::ensure_docker_network();
-            DockerCompose::new(settings).run("up -d");
+            commander.run("docker-compose", "up -d");
             utils::print_traefik_hosts_info().await;
         }
         Some(Commands::Down {}) => {
-            DockerCompose::new(settings).run("down");
+            commander.run("docker-compose", "down");
         }
         Some(Commands::Ps {}) => {
-            DockerCompose::new(settings).run("ps");
+            commander.run("docker-compose", "ps");
         }
         Some(Commands::Restart {}) => {
-            DockerCompose::new(settings).run("restart");
+            commander.run("docker-compose", "restart");
         }
         Some(Commands::Logs {}) => {
-            DockerCompose::new(settings).run("logs --tail=20");
+            commander.run("docker-compose", "logs --tail=20");
         }
         Some(Commands::List {}) => {
             utils::print_traefik_hosts_info().await;
@@ -27,17 +32,17 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
         Some(Commands::Git {
             command: GitCommands::Status {},
         }) => {
-            Git::new(settings).run("status");
+            commander.run("git", "status");
         }
         Some(Commands::Git {
             command: GitCommands::Pull {},
         }) => {
-            Git::new(settings).run("pull");
+            commander.run("git", "pull");
         }
         Some(Commands::Git {
             command: GitCommands::Push {},
         }) => {
-            Git::new(settings).run("push");
+            commander.run("git", "push");
         }
         Some(Commands::Git {
             command: GitCommands::Commit { message },
@@ -49,81 +54,9 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
                     return Ok(());
                 }
             };
-            Git::new(settings).run(&format!("commit -m \"{}\"", message));
+            commander.run("git", &format!("commit -m \"{}\"", message));
         }
         None => {}
     }
     Ok(())
-}
-
-trait LoopCommand {
-    fn new(settings: Settings) -> Self;
-    fn run(&self, command: &str);
-    fn run_command(&self, service: &str, command: &str);
-}
-
-struct DockerCompose {
-    settings: Settings,
-}
-impl LoopCommand for DockerCompose {
-    fn new(settings: Settings) -> Self {
-        Self { settings }
-    }
-
-    fn run(&self, command: &str) {
-        for profile in self.settings.profiles.iter() {
-            println!("----- Profile: {} ...", profile.name);
-            let services = &profile.services;
-            for service in services.iter() {
-                self.run_command(service, command);
-            }
-        }
-    }
-
-    fn run_command(&self, service: &str, command: &str) {
-        let project_root_path = self.settings.project_root_path.clone();
-        let formatted_runner_path = utils::format_runner_path(project_root_path.clone());
-
-        println!(
-            "> {}{}:\ndocker compose {}",
-            formatted_runner_path, service, command
-        );
-        utils::run_command(
-            &format!(
-                "docker compose -f {}/{}/docker-compose.yml {}",
-                project_root_path, service, command
-            ),
-            false,
-        );
-    }
-}
-
-struct Git {
-    settings: Settings,
-}
-impl LoopCommand for Git {
-    fn new(settings: Settings) -> Self {
-        Self { settings }
-    }
-
-    fn run(&self, command: &str) {
-        for profile in self.settings.profiles.iter() {
-            println!("----- Profile: {} ...", profile.name);
-            let services = &profile.services;
-            for service in services.iter() {
-                self.run_command(service, command);
-            }
-        }
-    }
-
-    fn run_command(&self, service: &str, command: &str) {
-        let project_root_path = self.settings.project_root_path.clone();
-        let formatted_runner_path = utils::format_runner_path(project_root_path.clone());
-
-        println!("> {}git:\ngit {}", formatted_runner_path, command);
-        utils::run_command(
-            &format!("git -C {}/{} {}", project_root_path, service, command),
-            false,
-        );
-    }
 }
