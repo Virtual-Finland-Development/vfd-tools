@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd ${SCRIPTPATH}/..
+
+if [ ! -f ./target/release/vfd ]; then
+    echo "> Building the vfd binary..."
+    make build
+fi
+
+./target/release/vfd $@

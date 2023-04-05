@@ -1,5 +1,3 @@
 data
 !data/.gitkeep
 target
-bin
-!bin/.gitkeep
