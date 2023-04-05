@@ -18,12 +18,18 @@ pub struct Profile {
     pub services: Vec<String>,
 }
 
-pub fn get_settings(cli: &CliArguments) -> Settings {
+fn read_settings() -> Settings {
     // Read settings.json
     let setting_file_contents =
         fs::read_to_string("./settings.json").expect("Failed to read settings.json");
-    let mut settings: Settings = serde_json::from_str(setting_file_contents.as_str())
+    let settings: Settings = serde_json::from_str(setting_file_contents.as_str())
         .expect("Failed to parse settings.json");
+
+    settings
+}
+
+pub fn get_cli_settings(cli: &CliArguments) -> Settings {
+    let mut settings = read_settings();
 
     // Resolve projects root path
     if env::var("VFD_PROJECTS_ROOT").is_ok() {
@@ -66,4 +72,40 @@ pub fn get_settings(cli: &CliArguments) -> Settings {
     }
 
     settings
+}
+
+pub fn parse_profiles(s: &str) -> Result<String, String> {
+    let settings = read_settings();
+    let profiles = s.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
+    for profile in profiles {
+        let mut found = false;
+        for p in settings.profiles.iter() {
+            if p.name == profile {
+                found = true;
+                break;
+            }
+        }
+        if !found {
+            return Err(format!("Profile {} not found", profile));
+        }
+    }
+    Ok(s.to_string())
+}
+
+pub fn parse_services(s: &str) -> Result<String, String> {
+    let settings = read_settings();
+    let services = s.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
+    for service in services {
+        let mut found = false;
+        for profile in settings.profiles.iter() {
+            if profile.services.contains(&service.to_string()) {
+                found = true;
+                break;
+            }
+        }
+        if !found {
+            return Err(format!("Service {} not found", service));
+        }
+    }
+    Ok(s.to_string())
 }

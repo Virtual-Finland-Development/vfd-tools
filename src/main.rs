@@ -12,9 +12,9 @@ pub struct CliArguments {
     // If provided, outputs the completion file for given shell
     #[arg(long = "generate-autocomplete", value_enum, hide = true)]
     pub generator: Option<Shell>,
-    #[arg(long, short)]
+    #[arg(long, short, value_parser = settings::parse_profiles)]
     pub profiles: Option<String>,
-    #[arg(long, short)]
+    #[arg(long, short, value_parser = settings::parse_services)]
     pub services: Option<String>,
     #[command(subcommand)]
     command: Option<Commands>,
@@ -66,6 +66,6 @@ async fn main() -> Result<()> {
     }
 
     // Application logic
-    let settings = settings::get_settings(&cli);
+    let settings = settings::get_cli_settings(&cli);
     runner::run(&cli, settings).await
 }
