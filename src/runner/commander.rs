@@ -30,7 +30,7 @@ impl Command for Commander {
     fn run_specific_action(&self, action: &str, service: &str, command: &str) {
         match action {
             "docker-compose" => self.run_docker_compose_action(service, command),
-            "git" => self.run_docker_compose_action(service, command),
+            "git" => self.run_git_action(service, command),
             _ => {
                 panic!("Unknown action: {}", action);
             }
@@ -42,7 +42,7 @@ impl Command for Commander {
         let formatted_runner_path = utils::format_runner_path(project_root_path.clone());
 
         println!(
-            "> {}{}:\ndocker compose {}",
+            "> {}{} → docker compose {}",
             formatted_runner_path, service, command
         );
         utils::run_command(
@@ -58,7 +58,7 @@ impl Command for Commander {
         let project_root_path = self.settings.project_root_path.clone();
         let formatted_runner_path = utils::format_runner_path(project_root_path.clone());
 
-        println!("> {}git:\ngit {}", formatted_runner_path, command);
+        println!("> {} → git {}", formatted_runner_path, command);
         utils::run_command(
             &format!("git -C {}/{} {}", project_root_path, service, command),
             false,

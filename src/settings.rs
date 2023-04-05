@@ -51,7 +51,9 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
     }
 
     // Filter profiles
+    let mut has_profile_filter = false;
     if let Some(profiles) = cli.profiles.as_deref() {
+        has_profile_filter = true;
         let profiles_list = profiles.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
         settings
             .profiles
@@ -69,6 +71,25 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
         settings
             .profiles
             .retain(|profile| !profile.services.is_empty());
+
+        if !has_profile_filter {
+            // Keep only the first profile for each service if no profile filter is set
+            let mut services = vec![];
+            for profile in settings.profiles.iter() {
+                for service in profile.services.iter() {
+                    if !services.contains(&service) {
+                        services.push(service);
+                    }
+                }
+            }
+            settings.profiles = services
+                .iter()
+                .map(|service| Profile {
+                    name: service.to_string(),
+                    services: vec![service.to_string()],
+                })
+                .collect();
+        }
     }
 
     settings
