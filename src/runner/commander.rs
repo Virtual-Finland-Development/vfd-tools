@@ -3,7 +3,7 @@ use crate::{runner::utils, settings::Settings};
 pub trait Command {
     fn new(settings: Settings) -> Self;
     fn run(&self, action: &str, command: &str);
-    fn run_action(&self, action: &str, service: &str, command: &str);
+    fn run_specific_action(&self, action: &str, service: &str, command: &str);
     fn run_docker_compose_action(&self, service: &str, command: &str);
     fn run_git_action(&self, service: &str, command: &str);
 }
@@ -22,12 +22,12 @@ impl Command for Commander {
             println!("----- Profile: {} ...", profile.name);
             let services = &profile.services;
             for service in services.iter() {
-                self.run_action(action, service, command);
+                self.run_specific_action(action, service, command);
             }
         }
     }
 
-    fn run_action(&self, action: &str, service: &str, command: &str) {
+    fn run_specific_action(&self, action: &str, service: &str, command: &str) {
         match action {
             "docker-compose" => self.run_docker_compose_action(service, command),
             "git" => self.run_docker_compose_action(service, command),
