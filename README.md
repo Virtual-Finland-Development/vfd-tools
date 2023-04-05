@@ -89,6 +89,16 @@ Restart your shell or source the profile file, then you can use the `vfd` as a g
 vfd --help
 ```
 
+### Shell autocompletion
+
+The `vfd` script supports shell autocompletion for bash, zsh and fish. To enable the autocompletion include the following to your shell profile file eg. `.bashrc` or `.zshrc`:
+
+```bash
+source /path/to/vfd-tools/scripts/autocomplete.sh
+```
+
+Replace `/path/to` with the path to the `vfd-tools` directory.
+
 ## Traefik setup
 
 By default the `vfd` -script will use [traefik](https://github.com/traefik/traefik) as a reverse proxy for the services. For example, the `access-to-finland-demo-front` service will be available at `http://app-access-to-finland-demo-front.localhost` after bringing up the services.

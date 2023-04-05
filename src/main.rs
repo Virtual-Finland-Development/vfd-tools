@@ -4,13 +4,13 @@ use clap_complete::{generate, Shell};
 use std::io;
 
 #[derive(Parser)]
-#[command(name = "VFD-Tools")]
+#[command(name = "vfd")]
 #[command(author = "lsipii@kapsi.fi")]
 #[command(version = "1.0")]
 #[command(about = "Engages in activities", long_about = None)]
 pub struct CliArguments {
     // If provided, outputs the completion file for given shell
-    #[arg(long = "generate", value_enum, hide = true)]
+    #[arg(long = "generate-autocomplete", value_enum, hide = true)]
     pub generator: Option<Shell>,
     #[arg(long, short)]
     pub profiles: Option<String>,

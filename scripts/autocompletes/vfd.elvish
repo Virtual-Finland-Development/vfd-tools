@@ -1,0 +1,147 @@
+
+use builtin;
+use str;
+
+set edit:completion:arg-completer[vfd] = {|@words|
+    fn spaces {|n|
+        builtin:repeat $n ' ' | str:join ''
+    }
+    fn cand {|text desc|
+        edit:complex-candidate $text &display=$text' '(spaces (- 14 (wcswidth $text)))$desc
+    }
+    var command = 'vfd'
+    for word $words[1..-1] {
+        if (str:has-prefix $word '-') {
+            break
+        }
+        set command = $command';'$word
+    }
+    var completions = [
+        &'vfd'= {
+            cand --generate-autocomplete 'generate-autocomplete'
+            cand -p 'p'
+            cand --profiles 'profiles'
+            cand -s 's'
+            cand --services 'services'
+            cand -h 'Print help'
+            cand --help 'Print help'
+            cand -V 'Print version'
+            cand --version 'Print version'
+            cand up 'up'
+            cand down 'down'
+            cand ps 'ps'
+            cand restart 'restart'
+            cand logs 'logs'
+            cand list 'list'
+            cand git 'Runs a git commandline command'
+            cand help 'Print this message or the help of the given subcommand(s)'
+        }
+        &'vfd;up'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;down'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;ps'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;restart'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;logs'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;list'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;git'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+            cand status 'status'
+            cand pull 'pull'
+            cand push 'push'
+            cand commit 'commit'
+            cand help 'Print this message or the help of the given subcommand(s)'
+        }
+        &'vfd;git;status'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;git;pull'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;git;push'= {
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;git;commit'= {
+            cand -m 'm'
+            cand --message 'message'
+            cand -h 'Print help'
+            cand --help 'Print help'
+        }
+        &'vfd;git;help'= {
+            cand status 'status'
+            cand pull 'pull'
+            cand push 'push'
+            cand commit 'commit'
+            cand help 'Print this message or the help of the given subcommand(s)'
+        }
+        &'vfd;git;help;status'= {
+        }
+        &'vfd;git;help;pull'= {
+        }
+        &'vfd;git;help;push'= {
+        }
+        &'vfd;git;help;commit'= {
+        }
+        &'vfd;git;help;help'= {
+        }
+        &'vfd;help'= {
+            cand up 'up'
+            cand down 'down'
+            cand ps 'ps'
+            cand restart 'restart'
+            cand logs 'logs'
+            cand list 'list'
+            cand git 'Runs a git commandline command'
+            cand help 'Print this message or the help of the given subcommand(s)'
+        }
+        &'vfd;help;up'= {
+        }
+        &'vfd;help;down'= {
+        }
+        &'vfd;help;ps'= {
+        }
+        &'vfd;help;restart'= {
+        }
+        &'vfd;help;logs'= {
+        }
+        &'vfd;help;list'= {
+        }
+        &'vfd;help;git'= {
+            cand status 'status'
+            cand pull 'pull'
+            cand push 'push'
+            cand commit 'commit'
+        }
+        &'vfd;help;git;status'= {
+        }
+        &'vfd;help;git;pull'= {
+        }
+        &'vfd;help;git;push'= {
+        }
+        &'vfd;help;git;commit'= {
+        }
+        &'vfd;help;help'= {
+        }
+    ]
+    $completions[$command]
+}
