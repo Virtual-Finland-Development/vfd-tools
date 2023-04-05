@@ -14,6 +14,8 @@ pub struct CliArguments {
     pub generator: Option<Shell>,
     #[arg(long, short)]
     pub profiles: Option<String>,
+    #[arg(long, short)]
+    pub services: Option<String>,
     #[command(subcommand)]
     command: Option<Commands>,
 }

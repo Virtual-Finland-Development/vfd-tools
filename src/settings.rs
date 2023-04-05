@@ -3,7 +3,7 @@ use std::{env, fs};
 
 use crate::CliArguments;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
     #[serde(rename = "project-root-path")]
     #[serde(default)]
@@ -50,6 +50,19 @@ pub fn get_settings(cli: &CliArguments) -> Settings {
         settings
             .profiles
             .retain(|profile| profiles_list.contains(&profile.name.as_str()));
+    }
+
+    // Filter services
+    if let Some(services) = cli.services.as_deref() {
+        let services_list = services.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
+        for profile in settings.profiles.iter_mut() {
+            profile
+                .services
+                .retain(|service| services_list.contains(&service.as_str()));
+        }
+        settings
+            .profiles
+            .retain(|profile| !profile.services.is_empty());
     }
 
     settings
