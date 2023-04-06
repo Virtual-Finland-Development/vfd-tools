@@ -153,6 +153,12 @@ esac
     ;;
 esac
 ;;
+(update)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
 (help)
 _arguments "${_arguments_options[@]}" \
 ":: :_vfd__help_commands" \
@@ -221,6 +227,10 @@ _arguments "${_arguments_options[@]}" \
     ;;
 esac
 ;;
+(update)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
 (help)
 _arguments "${_arguments_options[@]}" \
 && ret=0
@@ -248,6 +258,8 @@ _vfd_commands() {
 'list:' \
 'list-hosts:' \
 'git:Runs a git commandline command' \
+'update:Updates the vfd tool' \
+'self-update:Updates the vfd tool' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'vfd commands' commands "$@"
@@ -324,6 +336,7 @@ _vfd__help_commands() {
 'logs:' \
 'list:' \
 'git:Runs a git commandline command' \
+'update:Updates the vfd tool' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'vfd help commands' commands "$@"
@@ -427,6 +440,16 @@ _vfd__help__up_commands() {
 _vfd__up_commands() {
     local commands; commands=()
     _describe -t commands 'vfd up commands' commands "$@"
+}
+(( $+functions[_vfd__help__update_commands] )) ||
+_vfd__help__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'vfd help update commands' commands "$@"
+}
+(( $+functions[_vfd__update_commands] )) ||
+_vfd__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'vfd update commands' commands "$@"
 }
 
 if [ "$funcstack[1]" = "_vfd" ]; then

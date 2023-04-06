@@ -72,6 +72,9 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             };
             commander.run("git", &format!("commit -m \"{}\"", message));
         }
+        Some(Commands::Update {}) => {
+            utils::self_update();
+        }
         None => {}
     }
     Ok(())

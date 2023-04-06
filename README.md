@@ -13,12 +13,6 @@ The script is written in Rust but and needs to be compiled with the Rust toolcha
 - docker - https://docs.docker.com/get-docker/
 - make - https://www.gnu.org/software/make/
 
-#### **Install**
-
-```bash
-make install
-```
-
 ##### Shell shortcut setup
 
 Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
@@ -46,12 +40,6 @@ source /path/to/vfd-tools/scripts/autocomplete.sh
 Replace `/path/to` with the path to the `vfd-tools` directory.
 
 #### **Runtime requirements**
-
-##### Traefik requirements
-
-For listing hostnames of the services, the script requires the `jq` and `curl` command-line tools to be installed.
-
-##### Docker requirements
 
 The following network must be created: `vfd-network`.
 

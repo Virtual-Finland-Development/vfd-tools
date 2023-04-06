@@ -36,6 +36,9 @@ _vfd() {
             vfd,restart)
                 cmd="vfd__restart"
                 ;;
+            vfd,self-update)
+                cmd="vfd__update"
+                ;;
             vfd,start)
                 cmd="vfd__up"
                 ;;
@@ -47,6 +50,9 @@ _vfd() {
                 ;;
             vfd,up)
                 cmd="vfd__up"
+                ;;
+            vfd,update)
+                cmd="vfd__update"
                 ;;
             vfd__git,commit)
                 cmd="vfd__git__commit"
@@ -102,6 +108,9 @@ _vfd() {
             vfd__help,up)
                 cmd="vfd__help__up"
                 ;;
+            vfd__help,update)
+                cmd="vfd__help__update"
+                ;;
             vfd__help__git,commit)
                 cmd="vfd__help__git__commit"
                 ;;
@@ -121,7 +130,7 @@ _vfd() {
 
     case "${cmd}" in
         vfd)
-            opts="-p -s -h -V --generate-autocomplete --profiles --services --workdir --help --version up down ps restart logs list git help"
+            opts="-p -s -h -V --generate-autocomplete --profiles --services --workdir --help --version up down ps restart logs list git update help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -335,7 +344,7 @@ _vfd() {
             return 0
             ;;
         vfd__help)
-            opts="up down ps restart logs list git help"
+            opts="up down ps restart logs list git update help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -516,6 +525,20 @@ _vfd() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
+        vfd__help__update)
+            opts=""
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
         vfd__list)
             opts="-h --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
@@ -574,6 +597,20 @@ _vfd() {
             ;;
         vfd__up)
             opts="-h --no-traefik --no-detach --help"
+            if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
+                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+                return 0
+            fi
+            case "${prev}" in
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+            return 0
+            ;;
+        vfd__update)
+            opts="-h --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

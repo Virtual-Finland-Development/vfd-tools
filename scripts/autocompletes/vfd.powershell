@@ -38,6 +38,7 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             [CompletionResult]::new('logs', 'logs', [CompletionResultType]::ParameterValue, 'logs')
             [CompletionResult]::new('list', 'list', [CompletionResultType]::ParameterValue, 'list')
             [CompletionResult]::new('git', 'git', [CompletionResultType]::ParameterValue, 'Runs a git commandline command')
+            [CompletionResult]::new('update', 'update', [CompletionResultType]::ParameterValue, 'Updates the vfd tool')
             [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
             break
         }
@@ -129,6 +130,11 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
         'vfd;git;help;help' {
             break
         }
+        'vfd;update' {
+            [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
+            [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
+            break
+        }
         'vfd;help' {
             [CompletionResult]::new('up', 'up', [CompletionResultType]::ParameterValue, 'up')
             [CompletionResult]::new('down', 'down', [CompletionResultType]::ParameterValue, 'down')
@@ -137,6 +143,7 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             [CompletionResult]::new('logs', 'logs', [CompletionResultType]::ParameterValue, 'logs')
             [CompletionResult]::new('list', 'list', [CompletionResultType]::ParameterValue, 'list')
             [CompletionResult]::new('git', 'git', [CompletionResultType]::ParameterValue, 'Runs a git commandline command')
+            [CompletionResult]::new('update', 'update', [CompletionResultType]::ParameterValue, 'Updates the vfd tool')
             [CompletionResult]::new('help', 'help', [CompletionResultType]::ParameterValue, 'Print this message or the help of the given subcommand(s)')
             break
         }
@@ -175,6 +182,9 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             break
         }
         'vfd;help;git;commit' {
+            break
+        }
+        'vfd;help;update' {
             break
         }
         'vfd;help;help' {

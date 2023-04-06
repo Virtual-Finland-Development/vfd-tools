@@ -39,3 +39,12 @@ pub fn format_runner_path(project_root_path: String) -> String {
 pub fn ensure_docker_network() {
     run_command("docker network create vfd-network", true);
 }
+
+pub fn self_update() {
+    println!("Running the self update procedure..");
+    println!("> Updating with git..");
+    run_command("git pull", false);
+    println!("> Rebuilding..");
+    run_command("make build", false);
+    println!("> Done!");
+}

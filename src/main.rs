@@ -47,6 +47,8 @@ enum Commands {
         #[command(subcommand)]
         command: GitCommands,
     },
+    #[command(about = "Updates the vfd tool", visible_alias = "self-update")]
+    Update {},
 }
 
 #[derive(Subcommand)]
