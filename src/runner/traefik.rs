@@ -2,17 +2,11 @@ use super::utils::run_command;
 use anyhow::Result;
 
 pub fn start_traefik() {
-    run_command(
-        &format!("docker compose -f docker-compose.traefik.yml up -d",),
-        false,
-    );
+    run_command("docker compose -f docker-compose.traefik.yml up -d", false);
 }
 
 pub fn stop_traefik() {
-    run_command(
-        &format!("docker compose -f docker-compose.traefik.yml down",),
-        false,
-    );
+    run_command("docker compose -f docker-compose.traefik.yml down", false);
 }
 
 pub async fn print_traefik_hosts_info() {
