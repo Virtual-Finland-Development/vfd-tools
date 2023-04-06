@@ -61,13 +61,19 @@ Bring all services down:
 ./bin/vfd down
 ```
 
+Bring specific service profiles up:
+
+```bash
+./bin/vfd up --profiles virtual-finland
+```
+
 Bring specific services up:
 
 ```bash
 ./bin/vfd up --services users-api,authentication-gw
 ```
 
-Tail the logs of specific services of a project:
+Tail the logs of a specific docker compose service in a project:
 
 ```bash
 vfd logs --services=authentication-gw authgw -f
@@ -120,12 +126,6 @@ In the above example the `demoApp` is a reference to the service name and `demoA
 ### Disabling traefik
 
 Disable the traefik setup by setting the `VFD_USE_TRAEFIK` environment variable to `false` or by using the `--no-traefik` command-line argument.
-
-## Notes:
-
-- the authentication-gw service will report an `authentication-gw-caddy` container error of ports being already in use on startup, this is expected and can be ignored
-  - the caddy might be later departed from the authentication-gw service with traefik being used as a reverse proxy instead
-- with Windows subsystem for linux (WSL 2), there seems to be some networking issues when restarting the traefik container often, this should be fixable by restarting the WSL 2 instance (eg. `wsl --shutdown`) or by restarting the computer
 
 # Resources
 
