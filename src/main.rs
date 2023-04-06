@@ -12,9 +12,9 @@ pub struct CliArguments {
     // If provided, outputs the completion file for given shell
     #[arg(long = "generate-autocomplete", value_enum, hide = true)]
     pub generator: Option<Shell>,
-    #[arg(long, short, value_parser = settings::parse_profiles)]
+    #[arg(long, short, value_parser = settings::parse_profiles, global = true)]
     pub profiles: Option<String>,
-    #[arg(long, short, value_parser = settings::parse_services)]
+    #[arg(long, short, value_parser = settings::parse_services, global = true)]
     pub services: Option<String>,
     #[arg(long, help = "Sets the working directory")]
     pub workdir: Option<String>,

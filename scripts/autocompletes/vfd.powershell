@@ -43,6 +43,10 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             break
         }
         'vfd;up' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('--no-traefik', 'no-traefik', [CompletionResultType]::ParameterName, 'Skips the traefik domain routing')
             [CompletionResult]::new('--no-detach', 'no-detach', [CompletionResultType]::ParameterName, 'Runs the docker compose command without detaching')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
@@ -50,32 +54,56 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             break
         }
         'vfd;down' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('--no-traefik', 'no-traefik', [CompletionResultType]::ParameterName, 'Skips the traefik domain routing')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'vfd;ps' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'vfd;restart' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'vfd;logs' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'vfd;list' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'vfd;git' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('status', 'status', [CompletionResultType]::ParameterValue, 'status')
@@ -86,16 +114,28 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             break
         }
         'vfd;git;status' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'vfd;git;pull' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'vfd;git;push' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
@@ -103,6 +143,10 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
         'vfd;git;commit' {
             [CompletionResult]::new('-m', 'm', [CompletionResultType]::ParameterName, 'm')
             [CompletionResult]::new('--message', 'message', [CompletionResultType]::ParameterName, 'message')
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
@@ -131,6 +175,10 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             break
         }
         'vfd;update' {
+            [CompletionResult]::new('-p', 'p', [CompletionResultType]::ParameterName, 'p')
+            [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
+            [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
+            [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break

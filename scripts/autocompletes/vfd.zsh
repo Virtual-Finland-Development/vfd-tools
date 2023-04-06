@@ -36,6 +36,10 @@ _vfd() {
         case $line[1] in
             (up)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '--no-traefik[Skips the traefik domain routing]' \
 '--no-detach[Runs the docker compose command without detaching]' \
 '-h[Print help]' \
@@ -44,6 +48,10 @@ _arguments "${_arguments_options[@]}" \
 ;;
 (down)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '--no-traefik[Skips the traefik domain routing]' \
 '-h[Print help]' \
 '--help[Print help]' \
@@ -51,30 +59,50 @@ _arguments "${_arguments_options[@]}" \
 ;;
 (ps)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (restart)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (logs)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (list)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (git)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 ":: :_vfd__git_commands" \
@@ -89,18 +117,30 @@ _arguments "${_arguments_options[@]}" \
         case $line[1] in
             (status)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (pull)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (push)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
@@ -109,6 +149,10 @@ _arguments "${_arguments_options[@]}" \
 _arguments "${_arguments_options[@]}" \
 '-m+[]:MESSAGE: ' \
 '--message=[]:MESSAGE: ' \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
@@ -155,6 +199,10 @@ esac
 ;;
 (update)
 _arguments "${_arguments_options[@]}" \
+'-p+[]:PROFILES: ' \
+'--profiles=[]:PROFILES: ' \
+'-s+[]:SERVICES: ' \
+'--services=[]:SERVICES: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
