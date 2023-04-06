@@ -1,6 +1,7 @@
 complete -c vfd -n "__fish_use_subcommand" -l generate-autocomplete -r -f -a "{bash	,elvish	,fish	,powershell	,zsh	}"
 complete -c vfd -n "__fish_use_subcommand" -s p -l profiles -r
 complete -c vfd -n "__fish_use_subcommand" -s s -l services -r
+complete -c vfd -n "__fish_use_subcommand" -l workdir -d 'Sets the working directory' -r
 complete -c vfd -n "__fish_use_subcommand" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_use_subcommand" -s V -l version -d 'Print version'
 complete -c vfd -n "__fish_use_subcommand" -f -a "up"

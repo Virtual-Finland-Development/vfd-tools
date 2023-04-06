@@ -121,7 +121,7 @@ _vfd() {
 
     case "${cmd}" in
         vfd)
-            opts="-p -s -h -V --generate-autocomplete --profiles --services --help --version up down ps restart logs list git help"
+            opts="-p -s -h -V --generate-autocomplete --profiles --services --workdir --help --version up down ps restart logs list git help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -144,6 +144,10 @@ _vfd() {
                     return 0
                     ;;
                 -s)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
+                --workdir)
                     COMPREPLY=($(compgen -f "${cur}"))
                     return 0
                     ;;

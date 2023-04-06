@@ -20,6 +20,7 @@ _vfd() {
 '--profiles=[]:PROFILES: ' \
 '-s+[]:SERVICES: ' \
 '--services=[]:SERVICES: ' \
+'--workdir=[Sets the working directory]:WORKDIR: ' \
 '-h[Print help]' \
 '--help[Print help]' \
 '-V[Print version]' \

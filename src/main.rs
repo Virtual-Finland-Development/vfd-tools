@@ -16,6 +16,8 @@ pub struct CliArguments {
     pub profiles: Option<String>,
     #[arg(long, short, value_parser = settings::parse_services)]
     pub services: Option<String>,
+    #[arg(long, help = "Sets the working directory")]
+    pub workdir: Option<String>,
     #[command(subcommand)]
     command: Option<Commands>,
 }

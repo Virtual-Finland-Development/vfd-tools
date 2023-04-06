@@ -26,6 +26,7 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             [CompletionResult]::new('--profiles', 'profiles', [CompletionResultType]::ParameterName, 'profiles')
             [CompletionResult]::new('-s', 's', [CompletionResultType]::ParameterName, 's')
             [CompletionResult]::new('--services', 'services', [CompletionResultType]::ParameterName, 'services')
+            [CompletionResult]::new('--workdir', 'workdir', [CompletionResultType]::ParameterName, 'Sets the working directory')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('-V', 'V', [CompletionResultType]::ParameterName, 'Print version')

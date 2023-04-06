@@ -35,6 +35,10 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
     if env::var("VFD_PROJECTS_ROOT").is_ok() {
         settings.project_root_path = env::var("VFD_PROJECTS_ROOT").unwrap();
     }
+    if cli.workdir.is_some() {
+        settings.project_root_path = cli.workdir.clone().unwrap();
+    }
+
     // If projects path is not set, use the parent directory of the vfd-tools project directory
     if settings.project_root_path.is_empty() {
         settings.project_root_path = std::env::current_dir()

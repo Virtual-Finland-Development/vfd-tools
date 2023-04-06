@@ -23,6 +23,7 @@ set edit:completion:arg-completer[vfd] = {|@words|
             cand --profiles 'profiles'
             cand -s 's'
             cand --services 'services'
+            cand --workdir 'Sets the working directory'
             cand -h 'Print help'
             cand --help 'Print help'
             cand -V 'Print version'
