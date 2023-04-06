@@ -9,9 +9,13 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
     let commander = Commander::new(settings);
 
     match &cli.command {
-        Some(Commands::Up {}) => {
+        Some(Commands::Up { no_detach }) => {
             utils::ensure_docker_network();
-            commander.run("docker-compose", "up -d");
+            if *no_detach {
+                commander.run("docker-compose", "up");
+            } else {
+                commander.run("docker-compose", "up -d");
+            }
             utils::print_traefik_hosts_info().await;
         }
         Some(Commands::Down {}) => {

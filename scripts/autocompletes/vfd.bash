@@ -573,7 +573,7 @@ _vfd() {
             return 0
             ;;
         vfd__up)
-            opts="-h --help"
+            opts="-h --no-detach --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

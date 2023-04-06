@@ -36,6 +36,7 @@ _vfd() {
         case $line[1] in
             (up)
 _arguments "${_arguments_options[@]}" \
+'--no-detach[Runs the docker compose command without detaching]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
