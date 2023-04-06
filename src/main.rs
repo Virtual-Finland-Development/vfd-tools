@@ -26,11 +26,16 @@ pub struct CliArguments {
 enum Commands {
     #[command(visible_alias = "start")]
     Up {
+        #[arg(long, help = "Skips the traefik domain routing")]
+        no_traefik: bool,
         #[arg(long, help = "Runs the docker compose command without detaching")]
         no_detach: bool,
     },
     #[command(visible_alias = "stop")]
-    Down {},
+    Down {
+        #[arg(long, help = "Skips the traefik domain routing")]
+        no_traefik: bool,
+    },
     #[command(visible_alias = "status")]
     Ps {},
     Restart {},

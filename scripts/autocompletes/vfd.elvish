@@ -38,11 +38,13 @@ set edit:completion:arg-completer[vfd] = {|@words|
             cand help 'Print this message or the help of the given subcommand(s)'
         }
         &'vfd;up'= {
+            cand --no-traefik 'Skips the traefik domain routing'
             cand --no-detach 'Runs the docker compose command without detaching'
             cand -h 'Print help'
             cand --help 'Print help'
         }
         &'vfd;down'= {
+            cand --no-traefik 'Skips the traefik domain routing'
             cand -h 'Print help'
             cand --help 'Print help'
         }

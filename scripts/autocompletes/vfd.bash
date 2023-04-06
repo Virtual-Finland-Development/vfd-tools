@@ -159,7 +159,7 @@ _vfd() {
             return 0
             ;;
         vfd__down)
-            opts="-h --help"
+            opts="-h --no-traefik --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -573,7 +573,7 @@ _vfd() {
             return 0
             ;;
         vfd__up)
-            opts="-h --no-detach --help"
+            opts="-h --no-traefik --no-detach --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

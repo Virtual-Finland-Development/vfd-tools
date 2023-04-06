@@ -12,8 +12,10 @@ complete -c vfd -n "__fish_use_subcommand" -f -a "logs"
 complete -c vfd -n "__fish_use_subcommand" -f -a "list"
 complete -c vfd -n "__fish_use_subcommand" -f -a "git" -d 'Runs a git commandline command'
 complete -c vfd -n "__fish_use_subcommand" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
+complete -c vfd -n "__fish_seen_subcommand_from up" -l no-traefik -d 'Skips the traefik domain routing'
 complete -c vfd -n "__fish_seen_subcommand_from up" -l no-detach -d 'Runs the docker compose command without detaching'
 complete -c vfd -n "__fish_seen_subcommand_from up" -s h -l help -d 'Print help'
+complete -c vfd -n "__fish_seen_subcommand_from down" -l no-traefik -d 'Skips the traefik domain routing'
 complete -c vfd -n "__fish_seen_subcommand_from down" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from ps" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from restart" -s h -l help -d 'Print help'

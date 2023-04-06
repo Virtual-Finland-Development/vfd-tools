@@ -42,12 +42,14 @@ Register-ArgumentCompleter -Native -CommandName 'vfd' -ScriptBlock {
             break
         }
         'vfd;up' {
+            [CompletionResult]::new('--no-traefik', 'no-traefik', [CompletionResultType]::ParameterName, 'Skips the traefik domain routing')
             [CompletionResult]::new('--no-detach', 'no-detach', [CompletionResultType]::ParameterName, 'Runs the docker compose command without detaching')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
         }
         'vfd;down' {
+            [CompletionResult]::new('--no-traefik', 'no-traefik', [CompletionResultType]::ParameterName, 'Skips the traefik domain routing')
             [CompletionResult]::new('-h', 'h', [CompletionResultType]::ParameterName, 'Print help')
             [CompletionResult]::new('--help', 'help', [CompletionResultType]::ParameterName, 'Print help')
             break
