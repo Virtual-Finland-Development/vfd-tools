@@ -19,6 +19,32 @@ The script is written in Rust but and needs to be compiled with the Rust toolcha
 make install
 ```
 
+##### Shell shortcut setup
+
+Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
+
+```bash
+export PATH=$PATH:/path/to/vfd-tools/bin
+```
+
+Replace `/path/to` with the path to the `vfd-tools` directory.
+
+Restart your shell or source the profile file, then you can use the `vfd` as a global shell command:
+
+```bash
+vfd --help
+```
+
+##### Shell autocompletion
+
+The `vfd` script supports shell autocompletion for bash, zsh and fish. To enable the autocompletion include the following to your shell profile file eg. `.bashrc` or `.zshrc`:
+
+```bash
+source /path/to/vfd-tools/scripts/autocomplete.sh
+```
+
+Replace `/path/to` with the path to the `vfd-tools` directory.
+
 #### **Runtime requirements**
 
 ##### Traefik requirements
@@ -46,31 +72,41 @@ If need be, set the vfd-projects root directory with the `VFD_PROJECTS_ROOT` env
 Print usage:
 
 ```bash
-./bin/vfd --help
+vfd --help
 ```
 
 Bring all services up:
 
 ```bash
-./bin/vfd up
+vfd up
 ```
 
 Bring all services down:
 
 ```bash
-./bin/vfd down
+vfd down
+```
+
+List traefik domains of all services:
+
+```bash
+vfd list
+```
+
+```bash
+vfd up
 ```
 
 Bring specific service profiles up:
 
 ```bash
-./bin/vfd up --profiles virtual-finland
+vfd up --profiles virtual-finland
 ```
 
 Bring specific services up:
 
 ```bash
-./bin/vfd up --services users-api,authentication-gw
+vfd up --services users-api,authentication-gw
 ```
 
 Tail the logs of a specific docker compose service in a project:
@@ -78,32 +114,6 @@ Tail the logs of a specific docker compose service in a project:
 ```bash
 vfd logs --services=authentication-gw authgw -f
 ```
-
-### Shell shortcut setup
-
-Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
-
-```bash
-export PATH=$PATH:/path/to/vfd-tools/bin
-```
-
-Replace `/path/to` with the path to the `vfd-tools` directory.
-
-Restart your shell or source the profile file, then you can use the `vfd` as a global shell command:
-
-```bash
-vfd --help
-```
-
-### Shell autocompletion
-
-The `vfd` script supports shell autocompletion for bash, zsh and fish. To enable the autocompletion include the following to your shell profile file eg. `.bashrc` or `.zshrc`:
-
-```bash
-source /path/to/vfd-tools/scripts/autocomplete.sh
-```
-
-Replace `/path/to` with the path to the `vfd-tools` directory.
 
 ## Traefik setup
 
