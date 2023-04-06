@@ -1,12 +1,24 @@
+use std::env;
+
 use super::utils::run_command;
 use anyhow::Result;
 
 pub fn start_traefik() {
+    if is_traefik_globally_disabled() {
+        return;
+    }
     run_command("docker compose -f docker-compose.traefik.yml up -d", false);
 }
 
 pub fn stop_traefik() {
+    if is_traefik_globally_disabled() {
+        return;
+    }
     run_command("docker compose -f docker-compose.traefik.yml down", false);
+}
+
+fn is_traefik_globally_disabled() -> bool {
+    env::var("VFD_USE_TRAEFIK").is_ok() && env::var("VFD_USE_TRAEFIK").unwrap() == "false"
 }
 
 pub async fn print_traefik_hosts_info() {
