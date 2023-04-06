@@ -39,16 +39,6 @@ source /path/to/vfd-tools/scripts/autocomplete.sh
 
 Replace `/path/to` with the path to the `vfd-tools` directory.
 
-#### **Runtime requirements**
-
-The following network must be created: `vfd-network`.
-
-Create the network with the following command:
-
-```
-docker network create vfd-network
-```
-
 #### **Usage:**
 
 The script will look for docker-compose files in the vfd-projects root directory and bring up/down the services defined in them.
