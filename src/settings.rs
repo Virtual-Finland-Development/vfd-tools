@@ -1,3 +1,4 @@
+use clap::builder::PossibleValue;
 use serde_derive::{Deserialize, Serialize};
 use std::{env, fs};
 
@@ -58,19 +59,17 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
     let mut has_profile_filter = false;
     if let Some(profiles) = cli.profiles.as_deref() {
         has_profile_filter = true;
-        let profiles_list = profiles.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
         settings
             .profiles
-            .retain(|profile| profiles_list.contains(&profile.name.as_str()));
+            .retain(|profile| profiles.contains(&profile.name));
     }
 
     // Filter services
     if let Some(services) = cli.services.as_deref() {
-        let services_list = services.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
         for profile in settings.profiles.iter_mut() {
             profile
                 .services
-                .retain(|service| services_list.contains(&service.as_str()));
+                .retain(|service| services.contains(service));
         }
         settings
             .profiles
@@ -99,38 +98,30 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
     settings
 }
 
-pub fn parse_profiles(s: &str) -> Result<String, String> {
+pub fn get_possible_profile_names() -> Vec<PossibleValue> {
     let settings = read_settings();
-    let profiles = s.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
-    for profile in profiles {
-        let mut found = false;
-        for p in settings.profiles.iter() {
-            if p.name == profile {
-                found = true;
-                break;
-            }
-        }
-        if !found {
-            return Err(format!("Profile {} not found", profile));
-        }
-    }
-    Ok(s.to_string())
+
+    settings
+        .profiles
+        .iter()
+        .map(|profile| PossibleValue::new(profile.name.clone()))
+        .collect()
 }
 
-pub fn parse_services(s: &str) -> Result<String, String> {
+pub fn get_possible_service_names() -> Vec<PossibleValue> {
     let settings = read_settings();
-    let services = s.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
-    for service in services {
-        let mut found = false;
-        for profile in settings.profiles.iter() {
-            if profile.services.contains(&service.to_string()) {
-                found = true;
-                break;
+
+    let mut services = vec![];
+    for profile in settings.profiles.iter() {
+        for service in profile.services.iter() {
+            if !services.contains(&service) {
+                services.push(service);
             }
         }
-        if !found {
-            return Err(format!("Service {} not found", service));
-        }
     }
-    Ok(s.to_string())
+
+    services
+        .iter()
+        .map(|service| PossibleValue::new(&(*service).clone()))
+        .collect()
 }

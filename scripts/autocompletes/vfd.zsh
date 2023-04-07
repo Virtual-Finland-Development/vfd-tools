@@ -16,10 +16,10 @@ _vfd() {
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" \
 '--generate-autocomplete=[]:GENERATOR:(bash elvish fish powershell zsh)' \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '--workdir=[Sets the working directory]:WORKDIR: ' \
 '-h[Print help]' \
 '--help[Print help]' \
@@ -36,10 +36,10 @@ _vfd() {
         case $line[1] in
             (up)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '--no-traefik[Skips the traefik domain routing]' \
 '--no-detach[Runs the docker compose command without detaching]' \
 '-h[Print help]' \
@@ -48,10 +48,10 @@ _arguments "${_arguments_options[@]}" \
 ;;
 (down)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '--no-traefik[Skips the traefik domain routing]' \
 '-h[Print help]' \
 '--help[Print help]' \
@@ -59,50 +59,50 @@ _arguments "${_arguments_options[@]}" \
 ;;
 (ps)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (restart)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (logs)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (list)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (git)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 ":: :_vfd__git_commands" \
@@ -117,30 +117,30 @@ _arguments "${_arguments_options[@]}" \
         case $line[1] in
             (status)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (pull)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (push)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
@@ -149,10 +149,10 @@ _arguments "${_arguments_options[@]}" \
 _arguments "${_arguments_options[@]}" \
 '-m+[]:MESSAGE: ' \
 '--message=[]:MESSAGE: ' \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
@@ -199,10 +199,10 @@ esac
 ;;
 (update)
 _arguments "${_arguments_options[@]}" \
-'-p+[]:PROFILES: ' \
-'--profiles=[]:PROFILES: ' \
-'-s+[]:SERVICES: ' \
-'--services=[]:SERVICES: ' \
+'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
+'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
