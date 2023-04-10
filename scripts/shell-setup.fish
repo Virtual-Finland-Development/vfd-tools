@@ -1,9 +1,9 @@
 #!/bin/fish
 # Current shell
-set SCRIPTPATH (dirname (status --current-filename))
+set SCRIPT_PATH (dirname (status --current-filename))
 
-source $SCRIPTPATH/generated/autocomplete.fish
+source $SCRIPT_PATH/generated/autocomplete.fish
 function vfd
-    make -f $SCRIPTPATH/../Makefile prepare-exec
-    $SCRIPTPATH/../target/release/vfd $argv
+    make -f $SCRIPT_PATH/../Makefile prepare-exec
+    $SCRIPT_PATH/../target/release/vfd $argv
 end
