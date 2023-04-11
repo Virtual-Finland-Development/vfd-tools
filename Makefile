@@ -33,7 +33,8 @@ build-vfd-tools:
 	docker run --rm --name=vfd-tools-builder \
 		-v $(shell pwd):/vfd-tools -w /vfd-tools \
 		$(RUST_IMAGE) \
-		cargo build --release --target=$(TARGET)
+		cargo build --release --target=$(TARGET) && \
+		cp ./target/$(TARGET)/release/vfd ./target/release/vfd
 create-auto-completes:
 	./target/release/vfd --generate-autocomplete zsh > ./scripts/autocompletes/vfd.zsh
 	./target/release/vfd --generate-autocomplete bash > ./scripts/autocompletes/vfd.bash
