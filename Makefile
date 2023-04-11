@@ -1,31 +1,5 @@
 RUST_IMAGE = rust:1.68.1
-
-# Retrieve the machine's operating system information
-OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
-ARCH := $(shell uname -m)
-
-# Define the target string based on the operating system and architecture
-ifeq ($(OS),darwin)
-    ifeq ($(ARCH),x86_64)
-		TARGET := x86_64-apple-darwin
-	else ifeq ($(ARCH),aarch64)
-		TARGET := aarch64-apple-darwin
-	else
-		$(error Unsupported architecture: $(ARCH))
-	endif
-else ifeq ($(OS),linux)
-    ifeq ($(ARCH),x86_64)
-        TARGET := x86_64-unknown-linux-gnu
-    else ifeq ($(ARCH),armv7l)
-        TARGET := armv7-unknown-linux-gnueabihf
-    else ifeq ($(ARCH),aarch64)
-        TARGET := aarch64-unknown-linux-gnu
-    else
-        $(error Unsupported architecture: $(ARCH))
-    endif
-else
-    $(error Unsupported operating system: $(OS))
-endif
+TARGET=$(shell ./scripts/resolve-build-target.sh)
 
 build: build-vfd-tools create-auto-completes
 
