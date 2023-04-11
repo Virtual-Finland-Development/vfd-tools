@@ -1,5 +1,5 @@
 RUST_IMAGE = rust:1.68.1
-TARGET=$(shell ./scripts/resolve-build-target.sh)
+TARGET:=$(shell ./scripts/resolve-build-target.sh)
 
 build: build-vfd-tools create-auto-completes
 
