@@ -35,6 +35,22 @@ Restart your shell or source the profile file, then you can use the `vfd` as a g
 vfd --help
 ```
 
+#### Use without shell setup
+
+If you don't want to add the `vfd` command to your shell profile, you can use the `vfd` script directly:
+
+Install:
+
+```shell
+make -C /path/to/vfd-tools build
+```
+
+Exec:
+
+```shell
+/path/to/vfd-tools/bin/vfd --help
+```
+
 #### **Usage:**
 
 The script will look for docker-compose files in the vfd-projects root directory and bring up/down the services defined in them.
