@@ -52,7 +52,12 @@ pub async fn print_traefik_hosts_info() {
                     .as_str()
                     .expect("Failed to parse service server");
 
-                let server_port = server.split(':').collect::<Vec<&str>>()[2];
+                let server_host_parts = server.split(':').collect::<Vec<&str>>();
+                if server_host_parts.len() != 3 {
+                    panic!("Failed to parse server host: {}", server)
+                }
+
+                let server_port = server_host_parts[2];
                 let host_server_combo =
                     format!("http://{} -> http://localhost:{}", host, server_port);
                 if !hosts.contains(&host_server_combo) {

@@ -5,15 +5,15 @@ ARCH:=$(shell uname -m)
 all:
 ifeq ($(OS),linux)
   ifeq ($(ARCH),armv7l)
-    TARGET:="armv7-unknown-linux-musleabihf"
+    TARGET:=armv7-unknown-linux-musleabihf
   else
-    TARGET:="${ARCH}-unknown-linux-gnu"
+    TARGET:=$(ARCH)-unknown-linux-gnu
   endif
 else ifeq ($(OS),darwin)
   ifeq ($(ARCH),x86_64)
-    TARGET:="x86_64-apple-darwin"
+    TARGET:=x86_64-apple-darwin
   else
-    TARGET:="aarch64-apple-darwin"
+    TARGET:=aarch64-apple-darwin
   endif
 endif
 ifeq ($(TARGET),)
