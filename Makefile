@@ -1,5 +1,24 @@
 BUILDER_IMAGE=vfd-tools-builder:1.68.2
-TARGET:=$(shell ./scripts/resolve-build-target.sh)
+OS:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
+ARCH:=$(shell uname -m)
+
+all:
+ifeq ($(OS),linux)
+  ifeq ($(ARCH),armv7l)
+    TARGET:="armv7-unknown-linux-musleabihf"
+  else
+    TARGET:="${ARCH}-unknown-linux-gnu"
+  endif
+else ifeq ($(OS),darwin)
+  ifeq ($(ARCH),x86_64)
+    TARGET:="x86_64-apple-darwin"
+  else
+    TARGET:="aarch64-apple-darwin"
+  endif
+endif
+ifeq ($(TARGET),)
+  $(error "Unsupported OS/ARCH combination: $(OS)/$(ARCH)")
+endif
 
 prepare-exec:
 	@# Build the binary if it doesn't exist
