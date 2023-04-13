@@ -13,12 +13,18 @@ The script is written in Rust but and needs to be compiled with the Rust toolcha
 - docker - https://docs.docker.com/get-docker/
 - make - https://www.gnu.org/software/make/
 
-##### Shell shortcut setup
+#### Install
 
 Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
 
 ```bash
-export PATH=$PATH:/path/to/vfd-tools/bin
+source /path/to/vfd-tools/scripts/shell-setup.sh
+```
+
+For fish shell add the following to your `config.fish` file:
+
+```fish
+source /path/to/vfd-tools/scripts/shell-setup.fish
 ```
 
 Replace `/path/to` with the path to the `vfd-tools` directory.
@@ -28,16 +34,6 @@ Restart your shell or source the profile file, then you can use the `vfd` as a g
 ```bash
 vfd --help
 ```
-
-##### Shell autocompletion
-
-The `vfd` script supports shell autocompletion for bash, zsh and fish. To enable the autocompletion include the following to your shell profile file eg. `.bashrc` or `.zshrc`:
-
-```bash
-source /path/to/vfd-tools/scripts/autocomplete.sh
-```
-
-Replace `/path/to` with the path to the `vfd-tools` directory.
 
 #### **Usage:**
 
