@@ -17,13 +17,13 @@ The script is written in Rust but and needs to be compiled with the Rust toolcha
 
 Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
 
-```bash
+```shell
 source /path/to/vfd-tools/scripts/shell-setup.sh
 ```
 
 For fish shell add the following to your `config.fish` file:
 
-```fish
+```shell
 source /path/to/vfd-tools/scripts/shell-setup.fish
 ```
 
@@ -31,7 +31,7 @@ Replace `/path/to/vfd-tools` with the actual path to the `vfd-tools` directory.
 
 Restart your shell or source the profile file, then you can use the `vfd` as a global shell command:
 
-```bash
+```shell
 vfd --help
 ```
 
@@ -45,43 +45,43 @@ If need be, set the vfd-projects root directory with the `VFD_PROJECTS_ROOT` env
 
 Print usage:
 
-```bash
+```shell
 vfd --help
 ```
 
 Bring all services up:
 
-```bash
+```shell
 vfd up
 ```
 
 Bring all services down:
 
-```bash
+```shell
 vfd down
 ```
 
 List traefik domains of all services:
 
-```bash
+```shell
 vfd list
 ```
 
 Bring specific service profiles up:
 
-```bash
+```shell
 vfd up --profiles virtual-finland
 ```
 
 Bring specific services up:
 
-```bash
+```shell
 vfd up --services users-api,authentication-gw
 ```
 
 Tail the logs of a specific docker compose service in a project:
 
-```bash
+```shell
 vfd logs --services=authentication-gw authgw -f
 ```
 
