@@ -1,8 +1,9 @@
 BUILDER_IMAGE=vfd-tools-builder:1.68.2
+
+prepare-build:
 OS:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH:=$(shell uname -m)
 
-all:
 ifeq ($(OS),linux)
   ifeq ($(ARCH),armv7l)
     TARGET:=armv7-unknown-linux-musleabihf
@@ -27,7 +28,7 @@ prepare-exec:
 		make build; \
 	fi
 
-build: build-vfd-tools create-auto-completes
+build: prepare-build build-vfd-tools create-auto-completes
 
 build-vfd-tools-builder:
 	docker build -t $(BUILDER_IMAGE) -f ./builder.dockerfile .
