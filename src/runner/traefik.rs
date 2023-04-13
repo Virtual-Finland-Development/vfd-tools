@@ -1,20 +1,40 @@
 use std::env;
 
+use crate::{logs::log_heading, settings::Settings};
+
 use super::utils::run_command;
 use anyhow::Result;
 
-pub fn start_traefik() {
+pub fn start_traefik(settings: Settings) {
     if is_traefik_globally_disabled() {
         return;
     }
-    run_command("docker compose -f docker-compose.traefik.yml up -d", false);
+
+    log_heading("Traefik");
+    let app_root_path = settings.app_root_path;
+    run_command(
+        &format!(
+            "docker compose -f {}/docker-compose.traefik.yml up -d",
+            app_root_path
+        ),
+        false,
+    );
 }
 
-pub fn stop_traefik() {
+pub fn stop_traefik(settings: Settings) {
     if is_traefik_globally_disabled() {
         return;
     }
-    run_command("docker compose -f docker-compose.traefik.yml down", false);
+
+    log_heading("Traefik");
+    let app_root_path = settings.app_root_path;
+    run_command(
+        &format!(
+            "docker compose -f {}/docker-compose.traefik.yml down",
+            app_root_path
+        ),
+        false,
+    );
 }
 
 fn is_traefik_globally_disabled() -> bool {

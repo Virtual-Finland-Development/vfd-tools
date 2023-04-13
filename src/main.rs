@@ -3,6 +3,8 @@ use clap::{arg, command, CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell};
 use std::io;
 
+mod logs;
+
 #[derive(Parser)]
 #[command(name = "vfd")]
 #[command(author = "lsipii@kapsi.fi")]

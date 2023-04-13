@@ -17,7 +17,7 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             utils::ensure_docker_network();
 
             if !*no_traefik {
-                traefik::start_traefik();
+                traefik::start_traefik(settings.clone());
             }
 
             if *no_detach {
@@ -30,7 +30,7 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             commander.run("docker-compose", "down");
 
             if !*no_traefik {
-                traefik::stop_traefik();
+                traefik::stop_traefik(settings.clone());
             }
         }
         Some(Commands::Ps {}) => {

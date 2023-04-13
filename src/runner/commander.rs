@@ -1,4 +1,4 @@
-use crate::{runner::utils, settings::Settings};
+use crate::{logs::log_heading, runner::utils, settings::Settings};
 
 pub trait Command {
     fn new(settings: Settings) -> Self;
@@ -19,9 +19,16 @@ impl Command for Commander {
 
     fn run(&self, action: &str, command: &str) {
         for profile in self.settings.profiles.iter() {
-            println!("----- Profile: {} ...", profile.name);
+            let is_profile_target = !profile.name.is_empty();
+            if is_profile_target {
+                log_heading(format!("Profile: {}", profile.name));
+            }
+
             let services = &profile.services;
             for service in services.iter() {
+                if !is_profile_target {
+                    log_heading(format!("Service: {}", service));
+                }
                 self.run_specific_action(action, service, command);
             }
         }

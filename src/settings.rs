@@ -98,7 +98,7 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
             settings.profiles = services
                 .iter()
                 .map(|service| Profile {
-                    name: service.to_string(),
+                    name: String::from(""),
                     services: vec![service.to_string()],
                 })
                 .collect();
