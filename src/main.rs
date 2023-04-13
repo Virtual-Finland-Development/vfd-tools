@@ -40,7 +40,7 @@ enum Commands {
     Ps {},
     Restart {},
     Logs {},
-    #[command(visible_alias = "list-hosts")]
+    #[command(visible_alias = "hosts")]
     List {},
     #[command(about = "Runs a git commandline command")]
     Git {
