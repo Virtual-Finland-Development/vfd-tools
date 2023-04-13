@@ -1,6 +1,6 @@
 use clap::builder::PossibleValue;
 use serde_derive::{Deserialize, Serialize};
-use std::{env, fs};
+use std::{env, fs, path::PathBuf};
 
 use crate::CliArguments;
 
@@ -55,12 +55,9 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
 
     // If projects path is not set, use the parent directory of the vfd-tools project directory
     if settings.projects_root_path.is_empty() {
-        settings.projects_root_path = std::env::current_dir()
-            .unwrap()
-            .to_str()
-            .unwrap()
-            .to_string()
-            + "/../";
+        let mut app_root_path = PathBuf::from(&settings.app_root_path);
+        app_root_path.pop(); // ../
+        settings.projects_root_path = app_root_path.to_str().unwrap().to_string() + "/";
     }
 
     // Resolve other matters

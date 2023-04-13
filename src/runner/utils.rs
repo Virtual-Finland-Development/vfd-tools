@@ -32,9 +32,6 @@ pub fn format_runner_path(projects_root_path: String) -> String {
             runner_path = runner_path.replace(home_path.as_str(), "~");
         }
     }
-    if runner_path.contains("/../") {
-        runner_path = runner_path.replace("/../", "/");
-    }
     runner_path
 }
 
