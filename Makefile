@@ -32,6 +32,7 @@ build: prepare-build build-vfd-tools create-build-link create-auto-completes
 	@echo "> Done!"
 
 build-vfd-tools-builder:
+	@echo "> Building vfd-tools builder..."
 	docker build -t $(BUILDER_IMAGE) -f ./builder.dockerfile .
 
 build-vfd-tools: build-vfd-tools-builder
@@ -42,7 +43,7 @@ build-vfd-tools: build-vfd-tools-builder
 		cargo build --release --target=$(TARGET)
 
 create-build-link:
-	@echo "> Creating build link..."
+	@echo "> Creating build links..."
 	@rm ./bin/vfd || true
 	@ln -sf $(shell pwd)/target/$(TARGET)/release/vfd ./bin/vfd
 
