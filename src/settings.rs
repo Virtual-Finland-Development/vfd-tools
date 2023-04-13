@@ -21,8 +21,15 @@ pub struct Profile {
 
 fn read_settings() -> Settings {
     // Read settings.json
+    let app_root_path = env::current_exe().expect("Failed to get current executable path");
+    let settings_path = app_root_path
+        .parent()
+        .and_then(|parent| parent.parent())
+        .map(|parent| parent.join("settings.json"))
+        .expect("Failed to get settings path");
+
     let setting_file_contents =
-        fs::read_to_string("./settings.json").expect("Failed to read settings.json");
+        fs::read_to_string(settings_path).expect("Failed to read settings.json");
     let settings: Settings = serde_json::from_str(setting_file_contents.as_str())
         .expect("Failed to parse settings.json");
 
