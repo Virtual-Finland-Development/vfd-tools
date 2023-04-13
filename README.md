@@ -71,10 +71,6 @@ List traefik domains of all services:
 vfd list
 ```
 
-```bash
-vfd up
-```
-
 Bring specific service profiles up:
 
 ```bash
