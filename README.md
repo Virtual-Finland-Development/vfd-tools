@@ -27,7 +27,7 @@ For fish shell add the following to your `config.fish` file:
 source /path/to/vfd-tools/scripts/shell-setup.fish
 ```
 
-Replace `/path/to` with the path to the `vfd-tools` directory.
+Replace `/path/to/vfd-tools` with the actual path to the `vfd-tools` directory.
 
 Restart your shell or source the profile file, then you can use the `vfd` as a global shell command:
 
