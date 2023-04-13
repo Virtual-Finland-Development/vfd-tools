@@ -38,8 +38,8 @@ impl Command for Commander {
     }
 
     fn run_docker_compose_action(&self, service: &str, command: &str) {
-        let project_root_path = self.settings.project_root_path.clone();
-        let formatted_runner_path = utils::format_runner_path(project_root_path.clone());
+        let projects_root_path = self.settings.projects_root_path.clone();
+        let formatted_runner_path = utils::format_runner_path(projects_root_path.clone());
 
         println!(
             "> {}{} → docker compose {}",
@@ -48,19 +48,19 @@ impl Command for Commander {
         utils::run_command(
             &format!(
                 "docker compose -f {}/{}/docker-compose.yml {}",
-                project_root_path, service, command
+                projects_root_path, service, command
             ),
             false,
         );
     }
 
     fn run_git_action(&self, service: &str, command: &str) {
-        let project_root_path = self.settings.project_root_path.clone();
-        let formatted_runner_path = utils::format_runner_path(project_root_path.clone());
+        let projects_root_path = self.settings.projects_root_path.clone();
+        let formatted_runner_path = utils::format_runner_path(projects_root_path.clone());
 
         println!("> {} → git {}", formatted_runner_path, command);
         utils::run_command(
-            &format!("git -C {}/{} {}", project_root_path, service, command),
+            &format!("git -C {}/{} {}", projects_root_path, service, command),
             false,
         );
     }

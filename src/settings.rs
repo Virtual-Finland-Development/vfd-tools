@@ -6,12 +6,14 @@ use crate::CliArguments;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
-    #[serde(rename = "project-root-path")]
+    #[serde(rename = "projects-root-path")]
     #[serde(default)]
-    pub project_root_path: String,
+    pub projects_root_path: String,
     pub profiles: Vec<Profile>,
     #[serde(rename = "vfd-ssh-git")]
     pub vfd_ssh_git: String,
+    #[serde(default)]
+    pub app_root_path: String, // Populated at runtime
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Profile {
@@ -21,17 +23,19 @@ pub struct Profile {
 
 fn read_settings() -> Settings {
     // Read settings.json
-    let app_root_path = env::current_exe().expect("Failed to get current executable path");
-    let settings_path = app_root_path
+    let bin_exec_path = env::current_exe().expect("Failed to get current executable path");
+    let app_root_path = bin_exec_path
         .parent()
         .and_then(|parent| parent.parent())
-        .map(|parent| parent.join("settings.json"))
-        .expect("Failed to get settings path");
+        .expect("Failed to get app root path");
 
+    let settings_path = app_root_path.join("settings.json");
     let setting_file_contents =
         fs::read_to_string(settings_path).expect("Failed to read settings.json");
-    let settings: Settings = serde_json::from_str(setting_file_contents.as_str())
+    let mut settings: Settings = serde_json::from_str(setting_file_contents.as_str())
         .expect("Failed to parse settings.json");
+
+    settings.app_root_path = app_root_path.to_str().unwrap().to_string();
 
     settings
 }
@@ -41,15 +45,15 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
 
     // Resolve projects root path
     if env::var("VFD_PROJECTS_ROOT").is_ok() {
-        settings.project_root_path = env::var("VFD_PROJECTS_ROOT").unwrap();
+        settings.projects_root_path = env::var("VFD_PROJECTS_ROOT").unwrap();
     }
     if cli.workdir.is_some() {
-        settings.project_root_path = cli.workdir.clone().unwrap();
+        settings.projects_root_path = cli.workdir.clone().unwrap();
     }
 
     // If projects path is not set, use the parent directory of the vfd-tools project directory
-    if settings.project_root_path.is_empty() {
-        settings.project_root_path = std::env::current_dir()
+    if settings.projects_root_path.is_empty() {
+        settings.projects_root_path = std::env::current_dir()
             .unwrap()
             .to_str()
             .unwrap()

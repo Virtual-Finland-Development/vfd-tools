@@ -7,7 +7,7 @@ mod utils;
 use self::commander::{Command, Commander};
 
 pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
-    let commander = Commander::new(settings);
+    let commander = Commander::new(settings.clone());
 
     match &cli.command {
         Some(Commands::Up {
@@ -73,7 +73,7 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             commander.run("git", &format!("commit -m \"{}\"", message));
         }
         Some(Commands::Update {}) => {
-            utils::self_update();
+            utils::self_update(settings.clone());
         }
         None => {}
     }
