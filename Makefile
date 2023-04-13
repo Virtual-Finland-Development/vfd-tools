@@ -1,5 +1,5 @@
 BUILDER_IMAGE=vfd-tools-builder:1.68.2
-PRE_BUILD_TARGETS=aarch64-apple-darwin x86_64-apple-darwin x86_64-unknown-linux-gnu
+PRE_BUILD_TARGETS=aarch64-apple-darwin x86_64-unknown-linux-gnu
 
 prepare-build-target:
 OS:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
@@ -27,6 +27,7 @@ prepare-exec: prepare-build-target
 	@if [ ! -f ./bin/vfd ]; then \
 		if [ -f ./builds/$(TARGET)/vfd ]; then \
 			echo "> Linking the pre-built vfd-tools binary..."; \
+			rm ./bin/vfd || true; \
 			ln -s $(shell pwd)/builds/$(TARGET)/vfd ./bin/vfd; \
 		else \
 			echo "> Building the vfd binary..."; \
@@ -42,16 +43,18 @@ build-vfd-tools-builder:
 	docker build -t $(BUILDER_IMAGE) -f ./builder.dockerfile .
 
 build-vfd-tools: build-vfd-tools-builder
-	@echo "> Building vfd-tools..."
+	@echo "> Building vfd-tools for $(TARGET)..."
 	docker run --rm --name=vfd-tools-builder \
 		-v $(shell pwd):/vfd-tools -w /vfd-tools \
 		$(BUILDER_IMAGE) \
-		cargo build --release --target=$(TARGET)
+		cargo build --release --target=$(TARGET) && \
+		mkdir -p ./builds/$(TARGET) && \
+		cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd
 
 create-build-link:
 	@echo "> Creating build links..."
 	@rm ./bin/vfd || true
-	@ln -sf $(shell pwd)/target/$(TARGET)/release/vfd ./bin/vfd
+	@ln -sf $(shell pwd)/builds/$(TARGET)/vfd ./bin/vfd
 
 create-auto-completes:
 	@echo "> Generating auto-completes..."
@@ -63,9 +66,7 @@ build-prebuilt-binaries: build-vfd-tools-builder
 	@echo "> Building the pre-built binaries..."
 	@for BUILD_TARGET in $(PRE_BUILD_TARGETS); do \
         echo "Building vfd for $$BUILD_TARGET..."; \
-        make build-vfd-tools TARGET=$$BUILD_TARGET && \
-        mkdir -p ./builds/$$BUILD_TARGET && \
-        cp ./target/$$BUILD_TARGET/release/vfd ./builds/$$BUILD_TARGET/vfd; \
+        make build-vfd-tools TARGET=$$BUILD_TARGET; \
     done
 	
 clean: clean-build

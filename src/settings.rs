@@ -28,7 +28,6 @@ fn read_settings() -> Settings {
         .parent()
         .and_then(|parent| parent.parent())
         .and_then(|parent| parent.parent())
-        .and_then(|parent| parent.parent())
         .expect("Failed to get app root path");
 
     let settings_path = app_root_path.join("settings.json");
