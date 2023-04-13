@@ -29,6 +29,7 @@ prepare-exec:
 	fi
 
 build: prepare-build build-vfd-tools create-build-link create-auto-completes
+	@echo "> Done!"
 
 build-vfd-tools-builder:
 	docker build -t $(BUILDER_IMAGE) -f ./builder.dockerfile .

@@ -49,5 +49,4 @@ pub fn self_update(settings: Settings) {
     run_command(&format!("git -C {} pull", app_root_path), false);
     println!("> Rebuilding..");
     run_command(&format!("make -C {} build", app_root_path), false);
-    println!("> Done!");
 }
