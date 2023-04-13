@@ -12,6 +12,7 @@ The script is written in Rust but and needs to be compiled with the Rust toolcha
 
 - docker - https://docs.docker.com/get-docker/
 - make - https://www.gnu.org/software/make/
+- git (optional) - https://git-scm.com/downloads
 
 #### Install
 
