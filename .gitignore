@@ -3,3 +3,5 @@ data
 target
 bin
 !bin/.gitkeep
+scripts/generated
+!scripts/generated/.gitkeep
