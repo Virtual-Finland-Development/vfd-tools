@@ -1,5 +1,13 @@
 BUILDER_IMAGE=vfd-tools-builder:1.68.2
-PRE_BUILD_TARGETS=aarch64-apple-darwin x86_64-unknown-linux-gnu
+PRE_BUILD_TARGETS=aarch64-apple-darwin \
+        x86_64-apple-darwin \
+		x86_64-unknown-linux-gnu \
+        x86_64-unknown-linux-musl
+
+# Fails to compile openssl-sys
+# aarch64-unknown-linux-gnu \
+# aarch64-unknown-linux-musl \
+# armv7-unknown-linux-musleabihf \
 
 prepare-build-target:
 OS:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
@@ -64,6 +72,7 @@ create-auto-completes:
 
 build-prebuilt-binaries: build-vfd-tools-builder
 	@echo "> Building the pre-built binaries..."
+	@set -e
 	@for BUILD_TARGET in $(PRE_BUILD_TARGETS); do \
         echo "Building vfd for $$BUILD_TARGET..."; \
         make build-vfd-tools TARGET=$$BUILD_TARGET; \
@@ -71,6 +80,9 @@ build-prebuilt-binaries: build-vfd-tools-builder
 	
 clean: clean-build
 
+clean-binaries:
+	rm -rf ./builds/*
+	
 clean-build:
 	rm -rf ./target
 	docker rmi $(BUILDER_IMAGE)
