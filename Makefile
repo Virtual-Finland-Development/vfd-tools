@@ -1,3 +1,4 @@
+SHELL=bash
 BUILDER_IMAGE=vfd-tools-builder:1.68.2
 PRE_BUILD_TARGETS=aarch64-apple-darwin \
         x86_64-apple-darwin \
@@ -52,10 +53,19 @@ build-vfd-tools-builder:
 
 build-vfd-tools: build-vfd-tools-builder
 	@echo "> Building vfd-tools for $(TARGET)..."
+	if [[ $(TARGET) == *darwin ]]; then \
+		docker run --rm --name=vfd-tools-builder \
+			-v /var/run/docker.sock:/var/run/docker.sock \
+			-w /vfd-tools-builder/cross \
+			$(BUILDER_IMAGE) \
+			cargo build-docker-image $(TARGET)-cross --tag local \
+				--build-arg 'MACOS_SDK_URL=https://github.com/joseluisq/macosx-sdks/releases/download/12.3/MacOSX12.3.sdk.tar.xz'; \
+	fi
 	docker run --rm --name=vfd-tools-builder \
 		-v $(shell pwd):/vfd-tools -w /vfd-tools \
+		-v /var/run/docker.sock:/var/run/docker.sock \
 		$(BUILDER_IMAGE) \
-		cargo build --release --target=$(TARGET) && \
+		cross build --release --target=$(TARGET) && \
 		mkdir -p ./builds/$(TARGET) && \
 		cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd
 
