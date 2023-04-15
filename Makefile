@@ -1,14 +1,13 @@
 SHELL=bash
 BUILDER_IMAGE=vfd-tools-builder:1.68.2
+DARWIN_BUILDER_IMAGE=joseluisq/rust-linux-darwin-builder:1.68.2
 PRE_BUILD_TARGETS=aarch64-apple-darwin \
-        x86_64-apple-darwin \
+		x86_64-apple-darwin \
+        aarch64-unknown-linux-gnu \
+		aarch64-unknown-linux-musl \
+		armv7-unknown-linux-musleabihf \
 		x86_64-unknown-linux-gnu \
         x86_64-unknown-linux-musl
-
-# Fails to compile openssl-sys
-# aarch64-unknown-linux-gnu \
-# aarch64-unknown-linux-musl \
-# armv7-unknown-linux-musleabihf \
 
 prepare-build-target:
 OS:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
@@ -34,14 +33,12 @@ endif
 prepare-exec: prepare-build-target
 	@# Build the binary if it doesn't exist
 	@if [ ! -f ./bin/vfd ]; then \
-		if [ -f ./builds/$(TARGET)/vfd ]; then \
-			echo "> Linking the pre-built vfd-tools binary..."; \
-			rm ./bin/vfd || true; \
-			ln -s $(shell pwd)/builds/$(TARGET)/vfd ./bin/vfd; \
-		else \
+		if [ ! -f ./builds/$(TARGET)/vfd ]; then \
 			echo "> Building the vfd binary..."; \
 			make build; \
 		fi \
+		echo "> Linking the pre-built vfd-tools binary..."; \
+		ln -s $(shell pwd)/builds/$(TARGET)/vfd ./bin/vfd; \
 	fi
 
 build: prepare-build-target build-vfd-tools create-build-link create-auto-completes
@@ -53,21 +50,23 @@ build-vfd-tools-builder:
 
 build-vfd-tools: build-vfd-tools-builder
 	@echo "> Building vfd-tools for $(TARGET)..."
-	if [[ $(TARGET) == *darwin ]]; then \
+	@if [[ $(TARGET) == *darwin ]]; then \
 		docker run --rm --name=vfd-tools-builder \
+			-v $(shell pwd):/vfd-tools -w /vfd-tools \
+			-e CC=oa64-clang -e CXX=oa64-clang++ \
+			$(DARWIN_BUILDER_IMAGE) \
+			cargo build --release --target=$(TARGET) && \
+			mkdir -p ./builds/$(TARGET) && \
+			cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd;  \
+	else \
+		docker run --rm --name=vfd-tools-builder \
+			-v $(shell pwd):/vfd-tools -w /vfd-tools \
 			-v /var/run/docker.sock:/var/run/docker.sock \
-			-w /vfd-tools-builder/cross \
 			$(BUILDER_IMAGE) \
-			cargo build-docker-image $(TARGET)-cross --tag local \
-				--build-arg 'MACOS_SDK_URL=https://github.com/joseluisq/macosx-sdks/releases/download/12.3/MacOSX12.3.sdk.tar.xz'; \
+			cross build --release --target=$(TARGET) && \
+			mkdir -p ./builds/$(TARGET) && \
+			cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd; \
 	fi
-	docker run --rm --name=vfd-tools-builder \
-		-v $(shell pwd):/vfd-tools -w /vfd-tools \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		$(BUILDER_IMAGE) \
-		cross build --release --target=$(TARGET) && \
-		mkdir -p ./builds/$(TARGET) && \
-		cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd
 
 create-build-link:
 	@echo "> Creating build links..."
@@ -96,3 +95,4 @@ clean-binaries:
 clean-build:
 	rm -rf ./target
 	docker rmi $(BUILDER_IMAGE)
+	docker rmi $(DARWIN_BUILDER_IMAGE)
