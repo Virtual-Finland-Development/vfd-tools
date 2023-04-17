@@ -10,15 +10,24 @@ pub struct Settings {
     #[serde(default)]
     pub projects_root_path: String,
     pub profiles: Vec<Profile>,
+    #[serde(rename = "dockerComposeOverrides")]
+    pub docker_compose_overrides: DockerComposeOverrides,
     #[serde(rename = "vfd-ssh-git")]
     pub vfd_ssh_git: String,
     #[serde(default)]
     pub app_root_path: String, // Populated at runtime
 }
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Profile {
     pub name: String,
     pub services: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DockerComposeOverrides {
+    #[serde(rename = "alwaysRebuild")]
+    pub always_rebuild: Vec<String>,
 }
 
 fn read_settings() -> Settings {

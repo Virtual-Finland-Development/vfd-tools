@@ -13,6 +13,7 @@ generate-auto-completes:
 	@docker run --rm -v $(shell pwd)/settings.json:/vfd-tools/settings.json ${VFD_TOOLS_IMAGE} --generate-autocomplete zsh > ./scripts/generated/autocomplete.zsh
 	@docker run --rm -v $(shell pwd)/settings.json:/vfd-tools/settings.json ${VFD_TOOLS_IMAGE} --generate-autocomplete bash > ./scripts/generated/autocomplete.bash
 	@docker run --rm -v $(shell pwd)/settings.json:/vfd-tools/settings.json ${VFD_TOOLS_IMAGE} --generate-autocomplete fish > ./scripts/generated/autocomplete.fish
+	@chmod +x ./scripts/generated/autocomplete.*
 
 clean:
 	@echo "> Cleaning..."
