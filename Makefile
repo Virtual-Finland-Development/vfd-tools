@@ -36,7 +36,7 @@ prepare-exec: prepare-build-target
 		if [ ! -f ./builds/$(TARGET)/vfd ]; then \
 			echo "> Building the vfd binary..."; \
 			make build; \
-		fi \
+		fi; \
 		echo "> Linking the pre-built vfd-tools binary..."; \
 		ln -s $(shell pwd)/builds/$(TARGET)/vfd ./bin/vfd; \
 	fi
