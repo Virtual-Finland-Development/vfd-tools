@@ -96,6 +96,6 @@ clean-binaries:
 	rm -rf ./builds/*
 	
 clean-build:
-	rm -rf ./target
-	docker rmi $(BUILDER_IMAGE)
-	docker rmi $(DARWIN_BUILDER_IMAGE)
+	rm -rf ./target || true
+	docker rmi $(BUILDER_IMAGE) || true
+	docker rmi $(DARWIN_BUILDER_IMAGE) || true
