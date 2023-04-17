@@ -17,7 +17,7 @@
     },
     {
       "name": "virtual-finland",
-      "services": ["authentication-gw", "testbed-api", "virtual-finland", "codesets", "prh-mock"]
+      "services": ["authentication-gw", "testbed-api", "virtual-finland", "codesets", "prh-mock", "users-api"]
     },
     {
       "name": "external-service-demo",
