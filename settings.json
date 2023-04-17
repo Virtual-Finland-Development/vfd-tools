@@ -28,5 +28,8 @@
       "services": ["authentication-gw", "status-info-api", "status-admin"]
     }
   ],
+  "dockerComposeOverrides": {
+    "alwaysRebuild": ["users-api", "prh-mock", "tmt-productizer", "JobsInFinland.Api.Productizer"]
+  },
   "vfd-ssh-git": "git@github.com:Virtual-Finland-Development"
 }
