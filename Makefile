@@ -17,5 +17,4 @@ generate-auto-completes:
 
 clean:
 	@echo "> Cleaning..."
-	@rm -rf ./scripts/generated
-	@docker rmi ${VFD_TOOLS_IMAGE}
+	@docker rmi ${VFD_TOOLS_IMAGE} || true
