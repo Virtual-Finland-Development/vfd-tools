@@ -70,7 +70,9 @@ build-vfd-tools: build-vfd-tools-builder
 
 create-build-link:
 	@echo "> Creating build links..."
-	@rm ./bin/vfd || true
+	@if [ -f ./bin/vfd ]; then \
+		rm ./bin/vfd; \
+	fi
 	@ln -sf $(shell pwd)/builds/$(TARGET)/vfd ./bin/vfd
 
 create-auto-completes:
