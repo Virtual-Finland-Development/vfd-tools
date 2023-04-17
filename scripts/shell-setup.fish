@@ -1,9 +1,7 @@
 #!/bin/fish
 # Current shell
 set SCRIPT_PATH (dirname (status --current-filename))
+set PROJECT_PATH (dirname $SCRIPT_PATH/../)
 
+set -x PATH $PATH $PROJECT_PATH/bin
 source $SCRIPT_PATH/generated/autocomplete.fish
-function vfd
-    make --silent --directory $SCRIPT_PATH/../ prepare-exec
-    $SCRIPT_PATH/../bin/vfd $argv
-end
