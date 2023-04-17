@@ -80,6 +80,7 @@ create-auto-completes:
 	@./bin/vfd --generate-autocomplete zsh > ./scripts/generated/autocomplete.zsh
 	@./bin/vfd --generate-autocomplete bash > ./scripts/generated/autocomplete.bash
 	@./bin/vfd --generate-autocomplete fish > ./scripts/generated/autocomplete.fish
+	@chmod +x ./scripts/generated/autocomplete.*
 
 build-prebuilt-binaries: build-vfd-tools-builder
 	@echo "> Building the pre-built binaries..."
