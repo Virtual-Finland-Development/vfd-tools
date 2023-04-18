@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 SHELL=$(basename $SHELL)
-SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+PROJECT_PATH="$(dirname "$(dirname "$(readlink -fm "$0")")")"
 
-source ${SCRIPT_PATH}/generated/autocomplete.${SHELL} 2>/dev/null || echo "> No autocomplete script for ${SHELL}"
+source ${PROJECT_PATH}/scripts/generated/autocomplete.${SHELL} 2>/dev/null || echo "> No autocomplete script for ${SHELL}"
 
 function vfd() {
-    make --silent --directory ${SCRIPT_PATH}/../ prepare-exec
-    ${SCRIPT_PATH}/../bin/vfd $@
+    make --silent --directory ${PROJECT_PATH} prepare-exec
+    VFD_TOOLS_CONFIGS_PATH=${PROJECT_PATH} ${PROJECT_PATH}/bin/vfd $@
 }

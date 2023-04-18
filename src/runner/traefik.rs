@@ -11,11 +11,11 @@ pub fn start_traefik(settings: Settings) {
     }
 
     log_heading("Traefik");
-    let app_root_path = settings.app_root_path;
+    let app_configs_path = settings.app_configs_path;
     run_command(
         &format!(
             "docker compose -f {}/docker-compose.traefik.yml up -d",
-            app_root_path
+            app_configs_path
         ),
         false,
     );
@@ -27,11 +27,11 @@ pub fn stop_traefik(settings: Settings) {
     }
 
     log_heading("Traefik");
-    let app_root_path = settings.app_root_path;
+    let app_configs_path = settings.app_configs_path;
     run_command(
         &format!(
             "docker compose -f {}/docker-compose.traefik.yml down",
-            app_root_path
+            app_configs_path
         ),
         false,
     );

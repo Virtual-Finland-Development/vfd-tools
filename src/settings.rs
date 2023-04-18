@@ -15,7 +15,7 @@ pub struct Settings {
     #[serde(rename = "vfd-ssh-git")]
     pub vfd_ssh_git: String,
     #[serde(default)]
-    pub app_root_path: String, // Populated at runtime
+    pub app_configs_path: String, // Populated at runtime
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -31,23 +31,31 @@ pub struct DockerComposeOverrides {
 }
 
 fn read_settings() -> Settings {
-    // Read settings.json
-    let bin_exec_path = env::current_exe().expect("Failed to get current executable path");
-    let app_root_path = bin_exec_path
-        .parent()
-        .and_then(|parent| parent.parent())
-        .and_then(|parent| parent.parent())
-        .expect("Failed to get app root path");
-
-    let settings_path = app_root_path.join("settings.json");
+    let app_configs_path = resolve_configurations_path();
+    let settings_path = app_configs_path.join("settings.json");
     let setting_file_contents =
         fs::read_to_string(settings_path).expect("Failed to read settings.json");
     let mut settings: Settings = serde_json::from_str(setting_file_contents.as_str())
         .expect("Failed to parse settings.json");
 
-    settings.app_root_path = app_root_path.to_str().unwrap().to_string();
+    settings.app_configs_path = app_configs_path.to_str().unwrap().to_string();
 
     settings
+}
+
+fn resolve_configurations_path() -> PathBuf {
+    if env::var("VFD_TOOLS_CONFIGS_PATH").is_ok() {
+        return PathBuf::from(env::var("VFD_TOOLS_CONFIGS_PATH").unwrap());
+    }
+
+    let bin_exec_path = env::current_exe().expect("Failed to get current executable path");
+    let app_configs_path = bin_exec_path
+        .parent()
+        .and_then(|parent| parent.parent())
+        .and_then(|parent| parent.parent())
+        .expect("Failed to get app root path");
+
+    app_configs_path.to_path_buf()
 }
 
 pub fn get_cli_settings(cli: &CliArguments) -> Settings {
@@ -63,9 +71,13 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
 
     // If projects path is not set, use the parent directory of the vfd-tools project directory
     if settings.projects_root_path.is_empty() {
-        let mut app_root_path = PathBuf::from(&settings.app_root_path);
-        app_root_path.pop(); // ../
-        settings.projects_root_path = app_root_path.to_str().unwrap().to_string() + "/";
+        let mut app_configs_path = PathBuf::from(&settings.app_configs_path);
+        app_configs_path.pop(); // ../
+        settings.projects_root_path = app_configs_path.to_str().unwrap().to_string() + "/";
+        println!(
+            "Projects root path is not set, using {}",
+            settings.projects_root_path
+        )
     }
 
     // Resolve other matters
