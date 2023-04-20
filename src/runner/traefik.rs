@@ -64,29 +64,9 @@ pub async fn print_traefik_hosts_info() {
                     continue;
                 }
 
-                let service = services[&service_name_key]
-                    .as_object()
-                    .expect("Failed to parse service");
-                let load_balancer = service["loadBalancer"]
-                    .as_object()
-                    .expect("Failed to parse service load balancer");
-                let servers = load_balancer["servers"]
-                    .as_array()
-                    .expect("Failed to parse service servers");
-                let server = servers[0]["url"]
-                    .as_str()
-                    .expect("Failed to parse service server");
-
-                let server_host_parts = server.split(':').collect::<Vec<&str>>();
-                if server_host_parts.len() != 3 {
-                    panic!("Failed to parse server host: {}", server)
-                }
-
-                let server_port = server_host_parts[2];
-                let host_server_combo =
-                    format!("http://{} -> http://localhost:{}", host, server_port);
-                if !hosts.contains(&host_server_combo) {
-                    hosts.push(host_server_combo);
+                let http_host = format!("http://{}", host);
+                if !hosts.contains(&http_host) {
+                    hosts.push(http_host);
                 }
             }
         }
