@@ -68,7 +68,7 @@ build-vfd-tools: build-vfd-tools-builder
 			cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd; \
 	fi
 
-create-build-link:
+create-build-link: prepare-build-target
 	@echo "> Creating build links..."
 	@if [ -f ./bin/vfd ]; then \
 		rm ./bin/vfd; \
@@ -89,7 +89,10 @@ build-binaries: build-vfd-tools-builder
         echo "Building vfd for $$BUILD_TARGET..."; \
         make build-vfd-tools TARGET=$$BUILD_TARGET; \
     done
-	
+
+prepare-publish: build-binaries create-build-link create-auto-completes
+	@echo "> Done!"
+
 clean: clean-build
 
 clean-binaries:
