@@ -50,16 +50,21 @@ pub async fn print_traefik_hosts_info() {
         let routers = hosts_info["routers"].as_object().unwrap();
         let services = hosts_info["services"].as_object().unwrap();
 
-        for (service_name, router) in routers {
+        for (_router_key, router) in routers {
             let rule = router["rule"].as_str().unwrap();
             if rule.contains("Host(") {
                 let host = rule.replace("Host(`", "").replace("`)", "");
+                let service_name = router["service"].as_str().unwrap();
+                let service_name_key = format!("{}@docker", service_name);
 
-                if host.contains("traefik") || !services.contains_key(service_name) {
+                if host.contains("traefik") || !services.contains_key(&service_name_key) {
+                    if !services.contains_key(&service_name_key) {
+                        println!("DEBUG: Service not found: {}", &service_name_key);
+                    }
                     continue;
                 }
 
-                let service = services[service_name]
+                let service = services[&service_name_key]
                     .as_object()
                     .expect("Failed to parse service");
                 let load_balancer = service["loadBalancer"]
