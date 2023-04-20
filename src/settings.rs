@@ -74,10 +74,6 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
         let mut app_configs_path = PathBuf::from(&settings.app_configs_path);
         app_configs_path.pop(); // ../
         settings.projects_root_path = app_configs_path.to_str().unwrap().to_string() + "/";
-        println!(
-            "Projects root path is not set, using {}",
-            settings.projects_root_path
-        )
     }
 
     // Resolve other matters

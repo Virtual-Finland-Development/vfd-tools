@@ -30,7 +30,7 @@ ifeq ($(TARGET),)
   $(error "Unsupported OS/ARCH combination: $(OS)/$(ARCH)")
 endif
 
-prepare-exec: prepare-build-target
+install: prepare-build-target
 	@# Build the binary if it doesn't exist
 	@if [ ! -f ./bin/vfd ]; then \
 		if [ ! -f ./builds/$(TARGET)/vfd ]; then \
@@ -51,7 +51,7 @@ build-vfd-tools-builder:
 build-vfd-tools: build-vfd-tools-builder
 	@echo "> Building vfd-tools for $(TARGET)..."
 	@if [[ $(TARGET) == *darwin ]]; then \
-		docker run --rm --name=vfd-tools-builder \
+		docker run --rm \
 			-v $(shell pwd):/vfd-tools -w /vfd-tools \
 			-e CC=oa64-clang -e CXX=oa64-clang++ \
 			$(DARWIN_BUILDER_IMAGE) \
@@ -59,7 +59,7 @@ build-vfd-tools: build-vfd-tools-builder
 			mkdir -p ./builds/$(TARGET) && \
 			cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd;  \
 	else \
-		docker run --rm --name=vfd-tools-builder \
+		docker run --rm \
 			-v $(shell pwd):/vfd-tools -w /vfd-tools \
 			-v /var/run/docker.sock:/var/run/docker.sock \
 			$(BUILDER_IMAGE) \
@@ -82,7 +82,7 @@ create-auto-completes:
 	@./bin/vfd --generate-autocomplete fish > ./scripts/generated/autocomplete.fish
 	@chmod +x ./scripts/generated/autocomplete.*
 
-build-prebuilt-binaries: build-vfd-tools-builder
+build-binaries: build-vfd-tools-builder
 	@echo "> Building the pre-built binaries..."
 	@set -e
 	@for BUILD_TARGET in $(PRE_BUILD_TARGETS); do \

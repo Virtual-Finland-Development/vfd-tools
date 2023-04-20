@@ -43,7 +43,7 @@ If you don't want to add the `vfd` command to your shell profile, you can use th
 Install:
 
 ```shell
-make -C /path/to/vfd-tools build
+make -C /path/to/vfd-tools install
 ```
 
 Exec:
