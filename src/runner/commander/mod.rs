@@ -1,6 +1,6 @@
 use crate::{logs::log_heading, settings::Settings};
 
-mod docker_compose;
+pub(crate) mod docker_compose;
 mod git;
 
 pub trait Command {

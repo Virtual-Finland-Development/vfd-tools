@@ -18,6 +18,24 @@ pub struct Settings {
     pub app_configs_path: String, // Populated at runtime
 }
 
+trait ResolveServices {
+    fn get_services(&self) -> Vec<String>;
+}
+
+impl Settings {
+    pub fn get_services(&self) -> Vec<String> {
+        let mut services: Vec<String> = Vec::new();
+
+        for profile in self.profiles.iter() {
+            for service in profile.services.iter() {
+                services.push(service.to_string());
+            }
+        }
+
+        services
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Profile {
     pub name: String,

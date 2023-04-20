@@ -1,8 +1,8 @@
 use crate::{settings::Settings, CliArguments, Commands, GitCommands};
 use anyhow::Result;
 mod commander;
+mod runner_app;
 mod traefik;
-mod utils;
 
 use self::commander::{Command, Commander};
 
@@ -14,7 +14,7 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             no_detach,
             no_traefik,
         }) => {
-            utils::ensure_docker_network();
+            runner_app::ensure_docker_network();
 
             if !*no_traefik {
                 traefik::start_traefik(settings.clone());
@@ -43,7 +43,7 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             commander.run("docker-compose", "logs --tail=20");
         }
         Some(Commands::List {}) => {
-            traefik::print_traefik_hosts_info().await;
+            runner_app::print_service_infos(settings.clone()).await;
         }
         Some(Commands::Git {
             command: GitCommands::Status {},
@@ -73,7 +73,7 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             commander.run("git", &format!("commit -m \"{}\"", message));
         }
         Some(Commands::Update {}) => {
-            utils::self_update(settings.clone());
+            runner_app::self_update(settings.clone());
         }
         None => {}
     }
