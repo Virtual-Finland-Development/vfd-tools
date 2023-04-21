@@ -46,6 +46,37 @@ pub struct Profile {
 pub struct DockerComposeOverrides {
     #[serde(rename = "alwaysRebuild")]
     pub always_rebuild: Vec<String>,
+    pub environment: Vec<DockerComposeEnvironment>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DockerComposeEnvironment {
+    pub key: String,
+    pub value: String,
+    pub conditions: Option<Vec<DockerComposeCondition>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DockerComposeCondition {
+    pub key: String,
+    pub value: String,
+    pub operator: Option<DockerComposeConditionOperation>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum DockerComposeConditionOperation {
+    #[serde(rename = "eq")]
+    Eq,
+    #[serde(rename = "neq")]
+    Neq,
+    #[serde(rename = "or")]
+    Or,
+    #[serde(rename = "xor")]
+    Xor,
+    #[serde(rename = "and")]
+    And,
+    #[serde(rename = "nand")]
+    Nand,
 }
 
 fn read_settings() -> Settings {

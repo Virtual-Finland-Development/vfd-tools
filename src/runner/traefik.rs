@@ -18,6 +18,7 @@ pub fn start_traefik(settings: Settings) {
             app_configs_path
         ),
         false,
+        None,
     );
 }
 
@@ -34,6 +35,7 @@ pub fn stop_traefik(settings: Settings) {
             app_configs_path
         ),
         false,
+        None,
     );
 }
 

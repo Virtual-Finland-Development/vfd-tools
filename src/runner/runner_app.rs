@@ -6,7 +6,11 @@ use std::{
     process::{Command, Stdio},
 };
 
-pub fn run_command(command: &str, quiet: bool) {
+pub fn run_command(
+    command: &str,
+    quiet: bool,
+    environment_variables_mapping: Option<Vec<(String, String)>>,
+) {
     let mut command_parts = command.split(' ');
     let primary_command = command_parts.next().unwrap();
 
@@ -17,6 +21,15 @@ pub fn run_command(command: &str, quiet: bool) {
         command.stdout(Stdio::null()).stderr(Stdio::null());
     } else {
         command.stdout(Stdio::inherit()).stderr(Stdio::inherit());
+    }
+
+    if let Some(environments) = environment_variables_mapping {
+        for environment_variable in environments.iter() {
+            command.env(
+                environment_variable.0.as_str(),
+                environment_variable.1.as_str(),
+            );
+        }
     }
 
     let result = command.spawn().expect("Failed to spawn command").wait();
@@ -48,16 +61,16 @@ pub fn format_runner_path(projects_root_path: String) -> String {
 }
 
 pub fn ensure_docker_network() {
-    run_command("docker network create vfd-network", true);
+    run_command("docker network create vfd-network", true, None);
 }
 
 pub fn self_update(settings: Settings) {
     let app_configs_path = settings.app_configs_path;
     println!("Running the self update procedure..");
     println!("> Updating with git..");
-    run_command(&format!("git -C {} pull", app_configs_path), false);
+    run_command(&format!("git -C {} pull", app_configs_path), false, None);
     println!("> Rebuilding..");
-    run_command(&format!("make -C {} build", app_configs_path), false);
+    run_command(&format!("make -C {} build", app_configs_path), false, None);
 }
 
 pub async fn print_service_infos(settings: Settings) {

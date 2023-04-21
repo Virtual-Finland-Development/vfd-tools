@@ -8,5 +8,6 @@ pub fn run_action(settings: &Settings, service: &str, command: &str) {
     runner_app::run_command(
         &format!("git -C {}/{} {}", projects_root_path, service, command),
         false,
+        None,
     );
 }

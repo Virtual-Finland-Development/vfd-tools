@@ -29,7 +29,23 @@
     }
   ],
   "dockerComposeOverrides": {
-    "alwaysRebuild": ["users-api", "prh-mock", "tmt-productizer", "JobsInFinland.Api.Productizer"]
+    "alwaysRebuild": ["users-api", "prh-mock", "tmt-productizer", "JobsInFinland.Api.Productizer"],
+    "environment": [
+      {
+        "key": "USERAPI_DOCKERFILE",
+        "value": "Dockerfile.arm64",
+        "conditions": [
+          {
+            "key": "service",
+            "value": "users-api"
+          },
+          {
+            "key": "arch",
+            "value": "arm"
+          }
+        ]
+      }
+    ]
   },
   "vfd-ssh-git": "git@github.com:Virtual-Finland-Development"
 }
