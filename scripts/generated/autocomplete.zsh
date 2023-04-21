@@ -145,18 +145,6 @@ _arguments "${_arguments_options[@]}" \
 '--help[Print help]' \
 && ret=0
 ;;
-(commit)
-_arguments "${_arguments_options[@]}" \
-'-m+[]:MESSAGE: ' \
-'--message=[]:MESSAGE: ' \
-'*-p+[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
-'*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
-'*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
-'*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
-'-h[Print help]' \
-'--help[Print help]' \
-&& ret=0
-;;
 (help)
 _arguments "${_arguments_options[@]}" \
 ":: :_vfd__git__help_commands" \
@@ -178,10 +166,6 @@ _arguments "${_arguments_options[@]}" \
 && ret=0
 ;;
 (push)
-_arguments "${_arguments_options[@]}" \
-&& ret=0
-;;
-(commit)
 _arguments "${_arguments_options[@]}" \
 && ret=0
 ;;
@@ -267,10 +251,6 @@ _arguments "${_arguments_options[@]}" \
 _arguments "${_arguments_options[@]}" \
 && ret=0
 ;;
-(commit)
-_arguments "${_arguments_options[@]}" \
-&& ret=0
-;;
         esac
     ;;
 esac
@@ -312,21 +292,6 @@ _vfd_commands() {
     )
     _describe -t commands 'vfd commands' commands "$@"
 }
-(( $+functions[_vfd__git__commit_commands] )) ||
-_vfd__git__commit_commands() {
-    local commands; commands=()
-    _describe -t commands 'vfd git commit commands' commands "$@"
-}
-(( $+functions[_vfd__git__help__commit_commands] )) ||
-_vfd__git__help__commit_commands() {
-    local commands; commands=()
-    _describe -t commands 'vfd git help commit commands' commands "$@"
-}
-(( $+functions[_vfd__help__git__commit_commands] )) ||
-_vfd__help__git__commit_commands() {
-    local commands; commands=()
-    _describe -t commands 'vfd help git commit commands' commands "$@"
-}
 (( $+functions[_vfd__down_commands] )) ||
 _vfd__down_commands() {
     local commands; commands=()
@@ -343,7 +308,6 @@ _vfd__git_commands() {
 'status:' \
 'pull:' \
 'push:' \
-'commit:' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'vfd git commands' commands "$@"
@@ -354,7 +318,6 @@ _vfd__help__git_commands() {
 'status:' \
 'pull:' \
 'push:' \
-'commit:' \
     )
     _describe -t commands 'vfd help git commands' commands "$@"
 }
@@ -364,7 +327,6 @@ _vfd__git__help_commands() {
 'status:' \
 'pull:' \
 'push:' \
-'commit:' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'vfd git help commands' commands "$@"

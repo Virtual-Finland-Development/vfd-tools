@@ -61,16 +61,13 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             commander.run("git", "push");
         }
         Some(Commands::Git {
-            command: GitCommands::Commit { message },
+            command: GitCommands::External(args),
         }) => {
-            let message = match message {
-                Some(message) => message,
-                None => {
-                    println!("Please provide a commit message");
-                    return Ok(());
-                }
-            };
-            commander.run("git", &format!("commit -m \"{}\"", message));
+            let args = args
+                .iter()
+                .map(|arg| arg.to_str().unwrap())
+                .collect::<Vec<&str>>();
+            commander.run("git", &args.join(" "));
         }
         Some(Commands::Update {}) => {
             runner_app::self_update(settings.clone());

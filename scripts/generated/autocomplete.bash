@@ -54,9 +54,6 @@ _vfd() {
             vfd,update)
                 cmd="vfd__update"
                 ;;
-            vfd__git,commit)
-                cmd="vfd__git__commit"
-                ;;
             vfd__git,help)
                 cmd="vfd__git__help"
                 ;;
@@ -68,9 +65,6 @@ _vfd() {
                 ;;
             vfd__git,status)
                 cmd="vfd__git__status"
-                ;;
-            vfd__git__help,commit)
-                cmd="vfd__git__help__commit"
                 ;;
             vfd__git__help,help)
                 cmd="vfd__git__help__help"
@@ -110,9 +104,6 @@ _vfd() {
                 ;;
             vfd__help,update)
                 cmd="vfd__help__update"
-                ;;
-            vfd__help__git,commit)
-                cmd="vfd__help__git__commit"
                 ;;
             vfd__help__git,pull)
                 cmd="vfd__help__git__pull"
@@ -198,7 +189,7 @@ _vfd() {
             return 0
             ;;
         vfd__git)
-            opts="-p -s -h --profiles --services --help status pull push commit help"
+            opts="-p -s -h --profiles --services --help status pull push help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -227,61 +218,9 @@ _vfd() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        vfd__git__commit)
-            opts="-m -p -s -h --message --profiles --services --help"
-            if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
-                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-                return 0
-            fi
-            case "${prev}" in
-                --message)
-                    COMPREPLY=($(compgen -f "${cur}"))
-                    return 0
-                    ;;
-                -m)
-                    COMPREPLY=($(compgen -f "${cur}"))
-                    return 0
-                    ;;
-                --profiles)
-                    COMPREPLY=($(compgen -W "access-to-finland virtual-finland external-service-demo status-admin" -- "${cur}"))
-                    return 0
-                    ;;
-                -p)
-                    COMPREPLY=($(compgen -W "access-to-finland virtual-finland external-service-demo status-admin" -- "${cur}"))
-                    return 0
-                    ;;
-                --services)
-                    COMPREPLY=($(compgen -W "authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock" -- "${cur}"))
-                    return 0
-                    ;;
-                -s)
-                    COMPREPLY=($(compgen -W "authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock" -- "${cur}"))
-                    return 0
-                    ;;
-                *)
-                    COMPREPLY=()
-                    ;;
-            esac
-            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-            return 0
-            ;;
         vfd__git__help)
-            opts="status pull push commit help"
+            opts="status pull push help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
-                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-                return 0
-            fi
-            case "${prev}" in
-                *)
-                    COMPREPLY=()
-                    ;;
-            esac
-            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-            return 0
-            ;;
-        vfd__git__help__commit)
-            opts=""
-            if [[ ${cur} == -* || ${COMP_CWORD} -eq 4 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
@@ -468,22 +407,8 @@ _vfd() {
             return 0
             ;;
         vfd__help__git)
-            opts="status pull push commit"
+            opts="status pull push"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
-                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-                return 0
-            fi
-            case "${prev}" in
-                *)
-                    COMPREPLY=()
-                    ;;
-            esac
-            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-            return 0
-            ;;
-        vfd__help__git__commit)
-            opts=""
-            if [[ ${cur} == -* || ${COMP_CWORD} -eq 4 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi

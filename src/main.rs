@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::{arg, command, CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell};
-use std::io;
+use std::{ffi::OsString, io};
 
 mod logs;
 
@@ -44,7 +44,7 @@ enum Commands {
     Logs {},
     #[command(visible_alias = "hosts")]
     List {},
-    #[command(about = "Runs a git commandline command")]
+    #[command(about = "Run git command to the selection")]
     Git {
         #[command(subcommand)]
         command: GitCommands,
@@ -58,10 +58,8 @@ enum GitCommands {
     Status {},
     Pull {},
     Push {},
-    Commit {
-        #[arg(long, short)]
-        message: Option<String>,
-    },
+    #[command(external_subcommand)]
+    External(Vec<OsString>),
 }
 
 mod runner;
