@@ -285,7 +285,7 @@ _vfd_commands() {
 'logs:' \
 'list:' \
 'hosts:' \
-'git:Runs a git commandline command' \
+'git:Run git command to the selection' \
 'update:Updates the vfd tool' \
 'self-update:Updates the vfd tool' \
 'help:Print this message or the help of the given subcommand(s)' \
@@ -345,7 +345,7 @@ _vfd__help_commands() {
 'restart:' \
 'logs:' \
 'list:' \
-'git:Runs a git commandline command' \
+'git:Run git command to the selection' \
 'update:Updates the vfd tool' \
 'help:Print this message or the help of the given subcommand(s)' \
     )

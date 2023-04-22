@@ -16,6 +16,8 @@ pub struct Settings {
     pub vfd_ssh_git: String,
     #[serde(default)]
     pub app_configs_path: String, // Populated at runtime
+    #[serde(default)]
+    pub has_service_selections: bool, // Populated at runtime
 }
 
 trait ResolveServices {
@@ -134,6 +136,7 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
     let mut has_profile_filter = false;
     if let Some(profiles) = cli.profiles.as_deref() {
         has_profile_filter = true;
+        settings.has_service_selections = true;
         settings
             .profiles
             .retain(|profile| profiles.contains(&profile.name));
@@ -141,6 +144,7 @@ pub fn get_cli_settings(cli: &CliArguments) -> Settings {
 
     // Filter services
     if let Some(services) = cli.services.as_deref() {
+        settings.has_service_selections = true;
         for profile in settings.profiles.iter_mut() {
             profile
                 .services

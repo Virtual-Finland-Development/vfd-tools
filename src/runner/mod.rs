@@ -2,12 +2,13 @@ use crate::{settings::Settings, CliArguments, Commands, GitCommands};
 use anyhow::Result;
 mod commander;
 mod runner_app;
+mod state;
 mod traefik;
 
 use self::commander::{Command, Commander};
 
 pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
-    let commander = Commander::new(settings.clone());
+    let mut commander = Commander::new(settings.clone());
 
     match &cli.command {
         Some(Commands::Up {
@@ -15,6 +16,7 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             no_traefik,
         }) => {
             runner_app::ensure_docker_network();
+            state::store(settings.clone());
 
             if !*no_traefik {
                 traefik::start_traefik(settings.clone());
@@ -27,6 +29,7 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             }
         }
         Some(Commands::Down { no_traefik }) => {
+            override_state_with_previous_if_none_set(settings.clone(), &mut commander, true);
             commander.run("docker-compose", "down");
 
             if !*no_traefik {
@@ -34,12 +37,15 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             }
         }
         Some(Commands::Ps {}) => {
+            override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
             commander.run("docker-compose", "ps");
         }
         Some(Commands::Restart {}) => {
+            override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
             commander.run("docker-compose", "restart");
         }
         Some(Commands::Logs {}) => {
+            override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
             commander.run("docker-compose", "logs --tail=20");
         }
         Some(Commands::List {}) => {
@@ -75,4 +81,30 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
         None => {}
     }
     Ok(())
+}
+
+/**
+ * Load previous state if no service selections
+ */
+fn override_state_with_previous_if_none_set(
+    settings: Settings,
+    commander: &mut Commander,
+    flush: bool,
+) {
+    // Load state if no service selections
+    if flush {
+        if !settings.has_service_selections {
+            let state_settings = state::flush(settings);
+            if let Some(state_settings) = state_settings {
+                commander.set_settings(state_settings);
+            }
+        } else {
+            state::clear(settings);
+        }
+    } else if !settings.has_service_selections {
+        let state_settings = state::read(settings);
+        if let Some(state_settings) = state_settings {
+            commander.set_settings(state_settings);
+        }
+    }
 }
