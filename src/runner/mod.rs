@@ -14,9 +14,13 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
         Some(Commands::Up {
             no_detach,
             no_traefik,
+            no_state,
         }) => {
             runner_app::ensure_docker_network();
-            state::store(settings.clone());
+
+            if !*no_state {
+                state::store(settings.clone());
+            }
 
             if !*no_traefik {
                 traefik::start_traefik(settings.clone());
@@ -28,24 +32,35 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
                 commander.run("docker-compose", "up -d");
             }
         }
-        Some(Commands::Down { no_traefik }) => {
-            override_state_with_previous_if_none_set(settings.clone(), &mut commander, true);
+        Some(Commands::Down {
+            no_traefik,
+            no_state,
+        }) => {
+            if !*no_state {
+                override_state_with_previous_if_none_set(settings.clone(), &mut commander, true);
+            }
             commander.run("docker-compose", "down");
 
             if !*no_traefik {
                 traefik::stop_traefik(settings.clone());
             }
         }
-        Some(Commands::Ps {}) => {
-            override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
+        Some(Commands::Ps { no_state }) => {
+            if !*no_state {
+                override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
+            }
             commander.run("docker-compose", "ps");
         }
-        Some(Commands::Restart {}) => {
-            override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
+        Some(Commands::Restart { no_state }) => {
+            if !*no_state {
+                override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
+            }
             commander.run("docker-compose", "restart");
         }
-        Some(Commands::Logs {}) => {
-            override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
+        Some(Commands::Logs { no_state }) => {
+            if !*no_state {
+                override_state_with_previous_if_none_set(settings.clone(), &mut commander, false);
+            }
             commander.run("docker-compose", "logs --tail=20");
         }
         Some(Commands::List {}) => {

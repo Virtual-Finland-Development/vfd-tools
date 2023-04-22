@@ -42,6 +42,7 @@ _arguments "${_arguments_options[@]}" \
 '*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '--no-traefik[Skips the traefik domain routing]' \
 '--no-detach[Runs the docker compose command without detaching]' \
+'--no-state[Stop the use of internal state]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
@@ -53,6 +54,7 @@ _arguments "${_arguments_options[@]}" \
 '*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '--no-traefik[Skips the traefik domain routing]' \
+'--no-state[Stop the use of internal state]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
@@ -63,6 +65,7 @@ _arguments "${_arguments_options[@]}" \
 '*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
 '*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'--no-state[Stop the use of internal state]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
@@ -73,6 +76,7 @@ _arguments "${_arguments_options[@]}" \
 '*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
 '*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'--no-state[Stop the use of internal state]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
@@ -83,6 +87,7 @@ _arguments "${_arguments_options[@]}" \
 '*--profiles=[]:PROFILES:(access-to-finland virtual-finland external-service-demo status-admin)' \
 '*-s+[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
 '*--services=[]:SERVICES:(authentication-gw users-api testbed-api external-service-demo access-to-finland-demo-front status-info-api status-admin codesets tmt-productizer JobsInFinland.Api.Productizer virtual-finland prh-mock)' \
+'--no-state[Stop the use of internal state]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0

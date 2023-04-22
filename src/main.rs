@@ -32,16 +32,29 @@ enum Commands {
         no_traefik: bool,
         #[arg(long, help = "Runs the docker compose command without detaching")]
         no_detach: bool,
+        #[arg(long, help = "Stop the use of internal state")]
+        no_state: bool,
     },
     #[command(visible_alias = "stop")]
     Down {
         #[arg(long, help = "Skips the traefik domain routing")]
         no_traefik: bool,
+        #[arg(long, help = "Stop the use of internal state")]
+        no_state: bool,
     },
     #[command(visible_alias = "status")]
-    Ps {},
-    Restart {},
-    Logs {},
+    Ps {
+        #[arg(long, help = "Stop the use of internal state")]
+        no_state: bool,
+    },
+    Restart {
+        #[arg(long, help = "Stop the use of internal state")]
+        no_state: bool,
+    },
+    Logs {
+        #[arg(long, help = "Stop the use of internal state")]
+        no_state: bool,
+    },
     #[command(visible_alias = "hosts")]
     List {},
     #[command(about = "Run git command to the selection")]

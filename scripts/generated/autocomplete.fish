@@ -17,19 +17,24 @@ complete -c vfd -n "__fish_seen_subcommand_from up" -s p -l profiles -r -f -a "{
 complete -c vfd -n "__fish_seen_subcommand_from up" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
 complete -c vfd -n "__fish_seen_subcommand_from up" -l no-traefik -d 'Skips the traefik domain routing'
 complete -c vfd -n "__fish_seen_subcommand_from up" -l no-detach -d 'Runs the docker compose command without detaching'
+complete -c vfd -n "__fish_seen_subcommand_from up" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from up" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from down" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from down" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
 complete -c vfd -n "__fish_seen_subcommand_from down" -l no-traefik -d 'Skips the traefik domain routing'
+complete -c vfd -n "__fish_seen_subcommand_from down" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from down" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from ps" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from ps" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
+complete -c vfd -n "__fish_seen_subcommand_from ps" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from ps" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from restart" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from restart" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
+complete -c vfd -n "__fish_seen_subcommand_from restart" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from restart" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from logs" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from logs" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
+complete -c vfd -n "__fish_seen_subcommand_from logs" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from logs" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from list" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from list" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
