@@ -1,8 +1,8 @@
+use std::fs;
+
 use serde_json::{from_str, json};
 
 use crate::{logs::log_heading, settings::Settings};
-
-use super::runner_app::get_command_output;
 
 pub fn store(settings: Settings) {
     let binding = json!(settings).to_string();
@@ -25,12 +25,30 @@ pub fn clear(settings: Settings) {
 fn run_state_operation(settings: Settings, operation: &str, params: &str) -> Option<Settings> {
     log_heading("VFD-Tools State: ".to_owned() + operation);
     let app_configs_path = &settings.app_configs_path;
-    // Read state
-    let contents = get_command_output(&format!(
-        "docker compose -f {}/docker-compose.state.yml run --rm vfd-tools-state {} {}",
-        app_configs_path, operation, params
-    ));
+    let state_path = format!("{}/.state", app_configs_path);
+    let state_file_path = format!("{}/.state", state_path);
 
+    // Ensure state directory exists
+    fs::create_dir_all(state_path).unwrap_or_default();
+
+    // Read-write operations match
+    let mut contents = String::new();
+    match operation {
+        "store" => {
+            fs::write(state_file_path, params).unwrap_or_default();
+        }
+        "read" => {
+            contents = fs::read_to_string(state_file_path).unwrap_or_default();
+        }
+        "flush" => {
+            contents = fs::read_to_string(&state_file_path).unwrap_or_default();
+            fs::remove_file(state_file_path).unwrap_or_default();
+        }
+        "clear" => {
+            fs::remove_file(state_file_path).unwrap_or_default();
+        }
+        _ => {}
+    }
     if let Ok(settings) = from_str::<Settings>(&contents) {
         Some(settings)
     } else {
