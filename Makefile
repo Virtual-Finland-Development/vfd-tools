@@ -31,19 +31,20 @@ ifeq ($(TARGET),)
 endif
 
 install: prepare-build-target
-	@# Build the binary if it doesn't exist
-	@if [ ! -f ./bin/vfd ]; then \
-		// Check if target in the pre-built binaries list
-		@if [[ $(PRE_BUILD_TARGETS) == *$(TARGET)* ]]; then \
+	@# Download or build the binary if it doesn't exist
+	@if [ ! -e ./bin/vfd ]; then \
+		set -e; \
+		if echo "$(PRE_BUILD_TARGETS)" | grep -qw "$(TARGET)" ; then \
 			echo "> Downloading the pre-built vfd-tools binary..."; \
 			docker run --rm \
 				-v $(shell pwd):/vfd-tools -w /vfd-tools \
-				alpine sh -c \
-				wget -q https://github.com/packages/vfd-tools/$(TARGET).tar.gz -P ./.builds && \
+				alpine sh -c 'mkdir -p ./.builds && \
+				wget -q https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1/$(TARGET).tar.gz -P ./.builds && \
+				wget -q https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1/$(TARGET).tar.gz.md5 -P ./.builds && \
+				md5sum -c ./.builds/$(TARGET).tar.gz.md5 && \
 				tar -xzf ./.builds/$(TARGET).tar.gz -C ./.builds && \
-				rm ./.builds/$(TARGET).tar.gz; \
+				rm ./.builds/$(TARGET).tar.gz'; \
 		fi; \
-
 		if [ ! -f ./.builds/$(TARGET)/vfd ]; then \
 			echo "> Building the vfd binary..."; \
 			make build; \
@@ -101,13 +102,13 @@ build-binaries: build-vfd-tools-builder
         make build-vfd-tools TARGET=$$BUILD_TARGET; \
     done
 
-create-release-archive-files: build-binaries
+create-release-archive-files: build-binaries generate-build-hash
 	@echo "> Creating release archive files..."
 	@set -e
 	@for BUILD_TARGET in $(PRE_BUILD_TARGETS); do \
 		tar -czf ./.builds/$$BUILD_TARGET.tar.gz -C ./.builds $$BUILD_TARGET; \
+		md5sum ./.builds/$$BUILD_TARGET.tar.gz > ./.builds/$$BUILD_TARGET.tar.gz.md5; \
 	done
-
 clean: clean-build
 
 clean-binaries:
@@ -117,3 +118,7 @@ clean-build:
 	rm -rf ./target || true
 	docker rmi $(BUILDER_IMAGE) || true
 	docker rmi $(DARWIN_BUILDER_IMAGE) || true
+
+generate-build-hash: 
+	@echo "> Creating build hash..."
+	@find ./src -type f -print0 | sort -z | xargs -0 cat | md5sum | cut -d ' ' -f 1 > ./.builds/version-hash.md5

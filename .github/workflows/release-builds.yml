@@ -12,12 +12,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Build binares
+      - name: Create multiarch builds
         run: | 
           make create-release-archive-files
       - uses: ncipollo/release-action@v1
         with:
           tag: v1
-          artifacts: ".builds/*.tar.gz"
+          artifacts: ".builds/version-hash.md5, .builds/*.tar.gz, .builds/*.tar.gz.md5"
           allowUpdates: true
           replacesArtifacts: true
