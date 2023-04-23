@@ -12,10 +12,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      -  name: check if codebase changed
+        id: check-codebase-changed
+        run: |
+          [ "$(make -s generate-build-hash)" != "$(make -s check-published-build-hash)" ] && echo "true" || echo "false" > $GITHUB_OUTPUT
       - name: Create multiarch builds
+        if: steps.check-codebase-changed.outputs == 'true'
         run: | 
           make create-release-archive-files
       - uses: ncipollo/release-action@v1
+        if: steps.check-codebase-changed.outputs == 'true'
         with:
           tag: v1
           artifacts: ".builds/version-hash.md5, .builds/*.tar.gz, .builds/*.tar.gz.md5"

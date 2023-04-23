@@ -30,7 +30,7 @@ ifeq ($(TARGET),)
   $(error "Unsupported OS/ARCH combination: $(OS)/$(ARCH)")
 endif
 
-install: prepare-build-target
+install: prepare-build-target ensure-builds-folder
 	@# Download or build the binary if it doesn't exist
 	@if [ ! -e ./bin/vfd ]; then \
 		set -e; \
@@ -38,7 +38,7 @@ install: prepare-build-target
 			echo "> Downloading the pre-built vfd-tools binary..."; \
 			docker run --rm \
 				-v $(shell pwd):/vfd-tools -w /vfd-tools \
-				alpine sh -c 'mkdir -p ./.builds && \
+				alpine sh -c '\
 				wget -q https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1/$(TARGET).tar.gz -P ./.builds && \
 				wget -q https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1/$(TARGET).tar.gz.md5 -P ./.builds && \
 				md5sum -c ./.builds/$(TARGET).tar.gz.md5 && \
@@ -102,13 +102,17 @@ build-binaries: build-vfd-tools-builder
         make build-vfd-tools TARGET=$$BUILD_TARGET; \
     done
 
-create-release-archive-files: build-binaries generate-build-hash
+create-release-archive-files: build-binaries store-build-hash
 	@echo "> Creating release archive files..."
 	@set -e
 	@for BUILD_TARGET in $(PRE_BUILD_TARGETS); do \
 		tar -czf ./.builds/$$BUILD_TARGET.tar.gz -C ./.builds $$BUILD_TARGET; \
 		md5sum ./.builds/$$BUILD_TARGET.tar.gz > ./.builds/$$BUILD_TARGET.tar.gz.md5; \
 	done
+
+ensure-builds-folder:
+	@mkdir -p ./.builds
+
 clean: clean-build
 
 clean-binaries:
@@ -119,6 +123,18 @@ clean-build:
 	docker rmi $(BUILDER_IMAGE) || true
 	docker rmi $(DARWIN_BUILDER_IMAGE) || true
 
-generate-build-hash: 
-	@echo "> Creating build hash..."
-	@find ./src -type f -print0 | sort -z | xargs -0 cat | md5sum | cut -d ' ' -f 1 > ./.builds/version-hash.md5
+store-build-hash:
+	@$(make -s generate-build-hash) > ./.builds/version-hash.md5
+generate-build-hash: ensure-builds-folder
+	@find ./src -type f -print0 | sort -z | xargs -0 cat | md5sum | cut -d ' ' -f 1
+check-published-build-hash:
+	@docker run --rm alpine sh -c 'wget -q -O - https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1/version-hash.md5'
+
+check-updates:
+	@echo "> Checking for updates..."
+	@if [ "$(shell make -s generate-build-hash)" != "$(shell make -s check-published-build-hash)" ]; then \
+		echo "-> There is a new version available!"; \
+		echo "-> Please run 'vfd self-update' to update to the latest version."; \
+	else \
+		echo "-> You are running the latest version!"; \
+	fi \
