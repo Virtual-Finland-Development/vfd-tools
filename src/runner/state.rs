@@ -23,7 +23,7 @@ pub fn clear(settings: Settings) {
 }
 
 fn run_state_operation(settings: Settings, operation: &str, params: &str) -> Option<Settings> {
-    log_heading("VFD-Tools State: ".to_owned() + operation);
+    log_heading("vfd-tools state: ".to_owned() + operation);
     let app_configs_path = &settings.app_configs_path;
     let state_path = format!("{}/.state", app_configs_path);
     let state_file_path = format!("{}/.state", state_path);
