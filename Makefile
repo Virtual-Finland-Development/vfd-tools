@@ -102,7 +102,7 @@ build-binaries: build-vfd-tools-builder
         make build-vfd-tools TARGET=$$BUILD_TARGET; \
     done
 
-create-release-archive-files: build-binaries store-build-hash
+create-release-archive-files: store-build-hash build-binaries
 	@echo "> Creating release archive files..."
 	@set -e
 	@for BUILD_TARGET in $(PRE_BUILD_TARGETS); do \
@@ -124,7 +124,9 @@ clean-build:
 	docker rmi $(DARWIN_BUILDER_IMAGE) || true
 
 store-build-hash:
-	@$(make -s generate-build-hash) > ./.builds/version-hash.md5
+	@echo "> Storing the build hash..."
+	@$(shell make -s generate-build-hash > ./.builds/version-hash.md5)
+	@echo "> Stored: $(shell cat ./.builds/version-hash.md5)"
 generate-build-hash: ensure-builds-folder
 	@find ./src -type f -print0 | sort -z | xargs -0 cat | md5sum | cut -d ' ' -f 1
 check-published-build-hash:
