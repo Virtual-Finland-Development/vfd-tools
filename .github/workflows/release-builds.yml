@@ -16,13 +16,12 @@ jobs:
         id: check-codebase
         run: |
           [ "$(make -s generate-build-hash)" != "$(make -s check-published-build-hash)" ] && echo "changed=true" || echo "changed=false" >> $GITHUB_OUTPUT
-          echo "$steps.check-codebase.outputs.changed"
       - name: Create multiarch builds
-        if: steps.check-codebase.outputs.changed == 'true'
+        if: ${{steps.check-codebase.outputs.changed}} == 'true'
         run: | 
           make create-release-archive-files
       - uses: ncipollo/release-action@v1
-        if: steps.check-codebase.outputs.changed == 'true'
+        if: ${{steps.check-codebase.outputs.changed}} == 'true'
         with:
           tag: v1
           artifacts: ".builds/version-hash.md5, .builds/*.tar.gz, .builds/*.tar.gz.md5"
