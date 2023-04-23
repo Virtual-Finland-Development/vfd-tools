@@ -33,12 +33,23 @@ endif
 install: prepare-build-target
 	@# Build the binary if it doesn't exist
 	@if [ ! -f ./bin/vfd ]; then \
-		if [ ! -f ./builds/$(TARGET)/vfd ]; then \
+		// Check if target in the pre-built binaries list
+		@if [[ $(PRE_BUILD_TARGETS) == *$(TARGET)* ]]; then \
+			echo "> Downloading the pre-built vfd-tools binary..."; \
+			docker run --rm \
+				-v $(shell pwd):/vfd-tools -w /vfd-tools \
+				alpine sh -c \
+				wget -q https://github.com/packages/vfd-tools/$(TARGET).tar.gz -P ./.builds && \
+				tar -xzf ./.builds/$(TARGET).tar.gz -C ./.builds && \
+				rm ./.builds/$(TARGET).tar.gz; \
+		fi; \
+
+		if [ ! -f ./.builds/$(TARGET)/vfd ]; then \
 			echo "> Building the vfd binary..."; \
 			make build; \
 		fi; \
 		echo "> Linking the pre-built vfd-tools binary..."; \
-		ln -s $(shell pwd)/builds/$(TARGET)/vfd ./bin/vfd; \
+		ln -s $(shell pwd)/.builds/$(TARGET)/vfd ./bin/vfd; \
 	fi
 
 build: prepare-build-target build-vfd-tools create-build-link create-auto-completes
@@ -56,16 +67,16 @@ build-vfd-tools: build-vfd-tools-builder
 			-e CC=oa64-clang -e CXX=oa64-clang++ \
 			$(DARWIN_BUILDER_IMAGE) \
 			cargo build --release --target=$(TARGET) && \
-			mkdir -p ./builds/$(TARGET) && \
-			cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd;  \
+			mkdir -p ./.builds/$(TARGET) && \
+			cp ./target/$(TARGET)/release/vfd ./.builds/$(TARGET)/vfd;  \
 	else \
 		docker run --rm \
 			-v $(shell pwd):/vfd-tools -w /vfd-tools \
 			-v /var/run/docker.sock:/var/run/docker.sock \
 			$(BUILDER_IMAGE) \
 			cross build --release --target=$(TARGET) && \
-			mkdir -p ./builds/$(TARGET) && \
-			cp ./target/$(TARGET)/release/vfd ./builds/$(TARGET)/vfd; \
+			mkdir -p ./.builds/$(TARGET) && \
+			cp ./target/$(TARGET)/release/vfd ./.builds/$(TARGET)/vfd; \
 	fi
 
 create-build-link: prepare-build-target
@@ -73,7 +84,7 @@ create-build-link: prepare-build-target
 	@if [ -f ./bin/vfd ]; then \
 		rm ./bin/vfd; \
 	fi
-	@ln -sf $(shell pwd)/builds/$(TARGET)/vfd ./bin/vfd
+	@ln -sf $(shell pwd)/.builds/$(TARGET)/vfd ./bin/vfd
 
 create-auto-completes:
 	@echo "> Generating auto-completes..."
@@ -90,13 +101,17 @@ build-binaries: build-vfd-tools-builder
         make build-vfd-tools TARGET=$$BUILD_TARGET; \
     done
 
-prepare-publish: build-binaries create-build-link create-auto-completes
-	@echo "> Done!"
+create-release-archive-files: build-binaries
+	@echo "> Creating release archive files..."
+	@set -e
+	@for BUILD_TARGET in $(PRE_BUILD_TARGETS); do \
+		tar -czf ./.builds/$$BUILD_TARGET.tar.gz -C ./.builds $$BUILD_TARGET; \
+	done
 
 clean: clean-build
 
 clean-binaries:
-	rm -rf ./builds/*
+	rm -rf ./.builds/*
 	
 clean-build:
 	rm -rf ./target || true
