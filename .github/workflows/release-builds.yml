@@ -3,6 +3,7 @@ name: release-builds
 on:
   push:
     branches: ['main']
+  workflow_dispatch:
 
 jobs:
   build-and-release-binaries:
@@ -12,7 +13,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: check if codebase changed
+      - name: Check if codebase changed
         id: check-codebase
         run: |
           [ "$(make -s generate-build-hash)" != "$(make -s check-published-build-hash)" ] && echo "changed=true" || echo "changed=false" >> $GITHUB_OUTPUT
