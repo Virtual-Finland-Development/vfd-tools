@@ -2,26 +2,54 @@
 
 Project development tools related to Virtual Finland Development (VFD) environment.
 
-## Scripts
+### **vfd** - a commander script (src/main.rs)
 
-### **vfd** - a commander script (src/runner.sh)
+A script for contolling docker-compose files located in separate vfd-project folders.
 
-A shell script for contolling docker-compose files located in separate vfd-project folders.
+#### **Build requirements**
 
-#### **Requirements**
+The script is written in Rust but and needs to be compiled with the Rust toolchain, but for convenience a makefile with a dockerized build environment is provided and as such the only requirement is to have `docker` and `make` installed:
 
-#### Traefik requirements
+- docker - https://docs.docker.com/get-docker/
+- make - https://www.gnu.org/software/make/
+- git (optional) - https://git-scm.com/downloads
 
-For listing hostnames of the services, the script requires the `jq` and `curl` command-line tools to be installed.
+#### Install
 
-#### Docker requirements
+Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
 
-If using docker compose, the following network must be created: `vfd-network`.
-
-Create the network with the following command:
-
+```shell
+source /path/to/vfd-tools/scripts/shell-setup.sh
 ```
-docker network create vfd-network
+
+For fish shell add the following to your `config.fish` file:
+
+```shell
+source /path/to/vfd-tools/scripts/shell-setup.fish
+```
+
+Replace `/path/to/vfd-tools` with the actual path to the `vfd-tools` directory.
+
+Restart your shell or source the profile file, then you can use the `vfd` as a global shell command:
+
+```shell
+vfd --help
+```
+
+#### Use without shell setup
+
+If you don't want to add the `vfd` command to your shell profile, you can use the `vfd` script directly:
+
+Install:
+
+```shell
+make -C /path/to/vfd-tools install
+```
+
+Exec:
+
+```shell
+/path/to/vfd-tools/bin/vfd --help
 ```
 
 #### **Usage:**
@@ -34,48 +62,44 @@ If need be, set the vfd-projects root directory with the `VFD_PROJECTS_ROOT` env
 
 Print usage:
 
-```bash
-./bin/vfd --help
+```shell
+vfd --help
 ```
 
 Bring all services up:
 
-```bash
-./bin/vfd up
+```shell
+vfd up
 ```
 
 Bring all services down:
 
-```bash
-./bin/vfd down
+```shell
+vfd down
+```
+
+List traefik domains of all services:
+
+```shell
+vfd list
+```
+
+Bring specific service profiles up:
+
+```shell
+vfd up --profiles virtual-finland
 ```
 
 Bring specific services up:
 
-```bash
-./bin/vfd up --services users-api,authentication-gw
+```shell
+vfd up --services users-api,authentication-gw
 ```
 
-Tail the logs of specific services of a project:
+Tail the logs of a specific docker compose service in a project:
 
-```bash
+```shell
 vfd logs --services=authentication-gw authgw -f
-```
-
-### Shell shortcut setup
-
-Add the following to your shell profile file eg. `.bashrc` or `.zshrc`:
-
-```bash
-export PATH=$PATH:/path/to/vfd-tools/bin
-```
-
-Replace `/path/to` with the path to the `vfd-tools` directory.
-
-Restart your shell or source the profile file, then you can use the `vfd` as a global shell command:
-
-```bash
-vfd --help
 ```
 
 ## Traefik setup
@@ -100,8 +124,6 @@ In the above example the `demoApp` is a reference to the service name and `demoA
 
 Disable the traefik setup by setting the `VFD_USE_TRAEFIK` environment variable to `false` or by using the `--no-traefik` command-line argument.
 
-## Notes:
+# Resources
 
-- the authentication-gw service will report an `authentication-gw-caddy` container error of ports being already in use on startup, this is expected and can be ignored
-  - the caddy might be later departed from the authentication-gw service with traefik being used as a reverse proxy instead
-- with Windows subsystem for linux (WSL 2), there seems to be some networking issues when restarting the traefik container often, this should be fixable by restarting the WSL 2 instance (eg. `wsl --shutdown`) or by restarting the computer
+- https://docs.rs/clap/latest/clap/_derive/_tutorial/index.html

@@ -1,0 +1,22 @@
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[package]
+name = "vfd-tools"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "vfd"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.70"
+clap = { version = "4.2.1", features = ["derive", "string"] }
+serde = "1.0.158"
+serde_derive = "1.0.158"
+serde_json = "1.0.94"
+clap_complete = "4.2.0"
+tokio = { version = "^1.27.0", features = ["full"] }
+#reqwest = { version = "0.11.16", default-features = false,  features = ["rustls-tls"] }
+reqwest = { version = "0.11.16" }
+openssl-sys = "0.9"
+openssl = { version = "0.10", features = ["vendored"] }
