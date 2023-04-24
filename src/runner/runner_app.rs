@@ -70,7 +70,16 @@ pub fn self_update(settings: Settings) {
     println!("> Updating with git..");
     run_command(&format!("git -C {} pull", app_configs_path), false, None);
     println!("> Rebuilding..");
-    run_command(&format!("make -C {} build", app_configs_path), false, None);
+    run_command(
+        &format!("make -C {} clean-binaries", app_configs_path),
+        false,
+        None,
+    );
+    run_command(
+        &format!("make -C {} install", app_configs_path),
+        false,
+        None,
+    );
 }
 
 pub async fn print_service_infos(settings: Settings) {

@@ -9,6 +9,8 @@ PRE_BUILD_TARGETS=aarch64-apple-darwin \
 		x86_64-unknown-linux-gnu \
         x86_64-unknown-linux-musl
 
+VFD_RELEASE_ASSETS_URI=https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1
+
 prepare-build-target:
 OS:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH:=$(shell uname -m)
@@ -39,8 +41,8 @@ install: prepare-build-target ensure-builds-folder
 			docker run --rm \
 				-v $(shell pwd):/vfd-tools -w /vfd-tools \
 				alpine sh -c '\
-				wget -q https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1/$(TARGET).tar.gz -P ./.builds && \
-				wget -q https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1/$(TARGET).tar.gz.md5 -P ./.builds && \
+				wget -q $(VFD_RELEASE_ASSETS_URI)/$(TARGET).tar.gz -P ./.builds && \
+				wget -q $(VFD_RELEASE_ASSETS_URI)/$(TARGET).tar.gz.md5 -P ./.builds && \
 				md5sum -c ./.builds/$(TARGET).tar.gz.md5 && \
 				tar -xzf ./.builds/$(TARGET).tar.gz -C ./.builds && \
 				rm ./.builds/$(TARGET).tar.gz'; \
@@ -50,6 +52,7 @@ install: prepare-build-target ensure-builds-folder
 			make build; \
 		fi; \
 		echo "> Linking the pre-built vfd-tools binary..."; \
+		rm ./bin/vfd || true; \
 		ln -s $(shell pwd)/.builds/$(TARGET)/vfd ./bin/vfd; \
 	fi
 
@@ -130,13 +133,13 @@ store-build-hash:
 generate-build-hash: ensure-builds-folder
 	@find ./src -type f -print0 | sort -z | xargs -0 cat | md5sum | cut -d ' ' -f 1
 check-published-build-hash:
-	@docker run --rm alpine sh -c 'wget -q -O - https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1/version-hash.md5'
+	@docker run --rm alpine sh -c 'wget -q -O - $(VFD_RELEASE_ASSETS_URI)/version-hash.md5 2>/dev/null'
 
-check-updates:
+check-for-updates:
 	@echo "> Checking for updates..."
 	@if [ "$(shell make -s generate-build-hash)" != "$(shell make -s check-published-build-hash)" ]; then \
 		echo "-> There is a new version available!"; \
 		echo "-> Please run 'vfd self-update' to update to the latest version."; \
 	else \
-		echo "-> You are running the latest version!"; \
-	fi \
+		echo "-> You are running the latest release version."; \
+	fi
