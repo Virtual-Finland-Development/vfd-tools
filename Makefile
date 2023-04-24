@@ -9,7 +9,8 @@ PRE_BUILD_TARGETS=aarch64-apple-darwin \
 		x86_64-unknown-linux-gnu \
         x86_64-unknown-linux-musl
 
-VFD_RELEASE_ASSETS_URI=https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/v1
+VFD_RELEASE_VERSION_TAG=v1
+VFD_RELEASE_ASSETS_URI=https://github.com/Virtual-Finland-Development/vfd-tools/releases/download/$(VFD_RELEASE_VERSION_TAG)
 
 prepare-build-target:
 OS:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
@@ -143,3 +144,14 @@ check-for-updates:
 	else \
 		echo "-> You are running the latest release version."; \
 	fi
+
+release-from-local:
+	@if ! command -v  gh &> /dev/null; then \
+		echo "> Please install the GitHub CLI (gh) to continue."; \
+		exit 1; \
+	fi
+	@echo "> Creating release archive files..."
+	@make create-release-archive-files
+	@echo "> Uploading the release assets..."
+	gh release upload $(VFD_RELEASE_VERSION_TAG) .builds/version-hash.md5 .builds/*.tar.gz .builds/*.tar.gz.md5 --clobber
+	@echo "> Done!"
