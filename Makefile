@@ -42,6 +42,7 @@ install: prepare-build-target ensure-builds-folder
 			docker run --rm \
 				-v $(shell pwd):/vfd-tools -w /vfd-tools \
 				alpine sh -c '\
+				wget -q $(VFD_RELEASE_ASSETS_URI)/version-hash.md5 -P ./.builds && \
 				wget -q $(VFD_RELEASE_ASSETS_URI)/$(TARGET).tar.gz -P ./.builds && \
 				wget -q $(VFD_RELEASE_ASSETS_URI)/$(TARGET).tar.gz.md5 -P ./.builds && \
 				md5sum -c ./.builds/$(TARGET).tar.gz.md5 && \
@@ -52,12 +53,13 @@ install: prepare-build-target ensure-builds-folder
 			echo "> Building the vfd binary..."; \
 			make build; \
 		fi; \
-		echo "> Linking the pre-built vfd-tools binary..."; \
-		rm ./bin/vfd || true; \
-		ln -s $(shell pwd)/.builds/$(TARGET)/vfd ./bin/vfd; \
+		make create-build-link; \
+		make create-auto-completes; \
+	elif [ "$(shell make check-build-hash)" != "$(shell make generate-build-hash)" ]; then \
+		echo "> Update available! To update run 'vfd update'"; \
 	fi
 
-build: prepare-build-target build-vfd-tools create-build-link create-auto-completes
+build: prepare-build-target build-vfd-tools create-build-link create-auto-completes store-build-hash
 	@echo "> Done!"
 
 build-vfd-tools-builder:
@@ -117,7 +119,7 @@ create-release-archive-files: store-build-hash build-binaries
 ensure-builds-folder:
 	@mkdir -p ./.builds
 
-clean: clean-build
+clean: clean-build clean-binaries
 
 clean-binaries:
 	rm -rf ./.builds/*
@@ -131,8 +133,10 @@ store-build-hash:
 	@echo "> Storing the build hash..."
 	@$(shell make -s generate-build-hash > ./.builds/version-hash.md5)
 	@echo "> Stored: $(shell cat ./.builds/version-hash.md5)"
-generate-build-hash: ensure-builds-folder
+generate-build-hash:
 	@find ./src -type f -print0 | sort -z | xargs -0 cat | md5sum | cut -d ' ' -f 1
+check-build-hash: ensure-builds-folder
+	@cat ./.builds/version-hash.md5 2>/dev/null || true
 check-published-build-hash:
 	@docker run --rm alpine sh -c 'wget -q -O - $(VFD_RELEASE_ASSETS_URI)/version-hash.md5 2>/dev/null'
 
@@ -145,4 +149,7 @@ release-from-local:
 	@make create-release-archive-files
 	@echo "> Uploading the release assets..."
 	gh release upload $(VFD_RELEASE_VERSION_TAG) .builds/version-hash.md5 .builds/*.tar.gz .builds/*.tar.gz.md5 --clobber
+	@echo "> Done!"
+
+self-update: clean-binaries install
 	@echo "> Done!"

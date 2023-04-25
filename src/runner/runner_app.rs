@@ -67,16 +67,8 @@ pub fn ensure_docker_network() {
 pub fn self_update(settings: Settings) {
     let app_configs_path = settings.app_configs_path;
     println!("Running the self update procedure..");
-    println!("> Updating with git..");
-    run_command(&format!("git -C {} pull", app_configs_path), false, None);
-    println!("> Rebuilding..");
     run_command(
-        &format!("make -C {} clean-binaries", app_configs_path),
-        false,
-        None,
-    );
-    run_command(
-        &format!("make -C {} install", app_configs_path),
+        &format!("make -s -C {} self-update", app_configs_path),
         false,
         None,
     );
