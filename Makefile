@@ -136,15 +136,6 @@ generate-build-hash: ensure-builds-folder
 check-published-build-hash:
 	@docker run --rm alpine sh -c 'wget -q -O - $(VFD_RELEASE_ASSETS_URI)/version-hash.md5 2>/dev/null'
 
-check-for-updates:
-	@echo "> Checking for updates..."
-	@if [ "$(shell make -s generate-build-hash)" != "$(shell make -s check-published-build-hash)" ]; then \
-		echo "-> There is a new version available!"; \
-		echo "-> Please run 'vfd self-update' to update to the latest version."; \
-	else \
-		echo "-> You are running the latest release version."; \
-	fi
-
 release-from-local:
 	@if ! command -v  gh &> /dev/null; then \
 		echo "> Please install the GitHub CLI (gh) to continue."; \
