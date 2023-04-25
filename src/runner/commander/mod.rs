@@ -7,6 +7,7 @@ pub trait Command {
     fn new(settings: Settings) -> Self;
     fn run(&self, action: &str, command: &str);
     fn run_specific_action(&self, action: &str, service: &str, command: &str);
+    fn set_settings(&mut self, settings: Settings);
 }
 
 pub struct Commander {
@@ -43,5 +44,9 @@ impl Command for Commander {
                 panic!("Unknown action: {}", action);
             }
         }
+    }
+
+    fn set_settings(&mut self, settings: Settings) {
+        self.settings = settings;
     }
 }

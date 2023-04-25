@@ -159,7 +159,7 @@ _vfd() {
             return 0
             ;;
         vfd__down)
-            opts="-p -s -h --no-traefik --profiles --services --help"
+            opts="-p -s -h --no-traefik --no-state --profiles --services --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -591,7 +591,7 @@ _vfd() {
             return 0
             ;;
         vfd__logs)
-            opts="-p -s -h --profiles --services --help"
+            opts="-p -s -h --no-state --profiles --services --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -621,7 +621,7 @@ _vfd() {
             return 0
             ;;
         vfd__ps)
-            opts="-p -s -h --profiles --services --help"
+            opts="-p -s -h --no-state --profiles --services --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -651,7 +651,7 @@ _vfd() {
             return 0
             ;;
         vfd__restart)
-            opts="-p -s -h --profiles --services --help"
+            opts="-p -s -h --no-state --profiles --services --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -681,7 +681,7 @@ _vfd() {
             return 0
             ;;
         vfd__up)
-            opts="-p -s -h --no-traefik --no-detach --profiles --services --help"
+            opts="-p -s -h --no-traefik --no-detach --no-state --profiles --services --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

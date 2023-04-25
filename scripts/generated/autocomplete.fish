@@ -10,26 +10,31 @@ complete -c vfd -n "__fish_use_subcommand" -f -a "ps"
 complete -c vfd -n "__fish_use_subcommand" -f -a "restart"
 complete -c vfd -n "__fish_use_subcommand" -f -a "logs"
 complete -c vfd -n "__fish_use_subcommand" -f -a "list"
-complete -c vfd -n "__fish_use_subcommand" -f -a "git" -d 'Runs a git commandline command'
+complete -c vfd -n "__fish_use_subcommand" -f -a "git" -d 'Run git command to the selection'
 complete -c vfd -n "__fish_use_subcommand" -f -a "update" -d 'Updates the vfd tool'
 complete -c vfd -n "__fish_use_subcommand" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c vfd -n "__fish_seen_subcommand_from up" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from up" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
 complete -c vfd -n "__fish_seen_subcommand_from up" -l no-traefik -d 'Skips the traefik domain routing'
 complete -c vfd -n "__fish_seen_subcommand_from up" -l no-detach -d 'Runs the docker compose command without detaching'
+complete -c vfd -n "__fish_seen_subcommand_from up" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from up" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from down" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from down" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
 complete -c vfd -n "__fish_seen_subcommand_from down" -l no-traefik -d 'Skips the traefik domain routing'
+complete -c vfd -n "__fish_seen_subcommand_from down" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from down" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from ps" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from ps" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
+complete -c vfd -n "__fish_seen_subcommand_from ps" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from ps" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from restart" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from restart" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
+complete -c vfd -n "__fish_seen_subcommand_from restart" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from restart" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from logs" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from logs" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
+complete -c vfd -n "__fish_seen_subcommand_from logs" -l no-state -d 'Stop the use of internal state'
 complete -c vfd -n "__fish_seen_subcommand_from logs" -s h -l help -d 'Print help'
 complete -c vfd -n "__fish_seen_subcommand_from list" -s p -l profiles -r -f -a "{access-to-finland	,virtual-finland	,external-service-demo	,status-admin	}"
 complete -c vfd -n "__fish_seen_subcommand_from list" -s s -l services -r -f -a "{authentication-gw	,users-api	,testbed-api	,external-service-demo	,access-to-finland-demo-front	,status-info-api	,status-admin	,codesets	,tmt-productizer	,JobsInFinland.Api.Productizer	,virtual-finland	,prh-mock	}"
@@ -63,7 +68,7 @@ complete -c vfd -n "__fish_seen_subcommand_from help; and not __fish_seen_subcom
 complete -c vfd -n "__fish_seen_subcommand_from help; and not __fish_seen_subcommand_from up; and not __fish_seen_subcommand_from down; and not __fish_seen_subcommand_from ps; and not __fish_seen_subcommand_from restart; and not __fish_seen_subcommand_from logs; and not __fish_seen_subcommand_from list; and not __fish_seen_subcommand_from git; and not __fish_seen_subcommand_from update; and not __fish_seen_subcommand_from help" -f -a "restart"
 complete -c vfd -n "__fish_seen_subcommand_from help; and not __fish_seen_subcommand_from up; and not __fish_seen_subcommand_from down; and not __fish_seen_subcommand_from ps; and not __fish_seen_subcommand_from restart; and not __fish_seen_subcommand_from logs; and not __fish_seen_subcommand_from list; and not __fish_seen_subcommand_from git; and not __fish_seen_subcommand_from update; and not __fish_seen_subcommand_from help" -f -a "logs"
 complete -c vfd -n "__fish_seen_subcommand_from help; and not __fish_seen_subcommand_from up; and not __fish_seen_subcommand_from down; and not __fish_seen_subcommand_from ps; and not __fish_seen_subcommand_from restart; and not __fish_seen_subcommand_from logs; and not __fish_seen_subcommand_from list; and not __fish_seen_subcommand_from git; and not __fish_seen_subcommand_from update; and not __fish_seen_subcommand_from help" -f -a "list"
-complete -c vfd -n "__fish_seen_subcommand_from help; and not __fish_seen_subcommand_from up; and not __fish_seen_subcommand_from down; and not __fish_seen_subcommand_from ps; and not __fish_seen_subcommand_from restart; and not __fish_seen_subcommand_from logs; and not __fish_seen_subcommand_from list; and not __fish_seen_subcommand_from git; and not __fish_seen_subcommand_from update; and not __fish_seen_subcommand_from help" -f -a "git" -d 'Runs a git commandline command'
+complete -c vfd -n "__fish_seen_subcommand_from help; and not __fish_seen_subcommand_from up; and not __fish_seen_subcommand_from down; and not __fish_seen_subcommand_from ps; and not __fish_seen_subcommand_from restart; and not __fish_seen_subcommand_from logs; and not __fish_seen_subcommand_from list; and not __fish_seen_subcommand_from git; and not __fish_seen_subcommand_from update; and not __fish_seen_subcommand_from help" -f -a "git" -d 'Run git command to the selection'
 complete -c vfd -n "__fish_seen_subcommand_from help; and not __fish_seen_subcommand_from up; and not __fish_seen_subcommand_from down; and not __fish_seen_subcommand_from ps; and not __fish_seen_subcommand_from restart; and not __fish_seen_subcommand_from logs; and not __fish_seen_subcommand_from list; and not __fish_seen_subcommand_from git; and not __fish_seen_subcommand_from update; and not __fish_seen_subcommand_from help" -f -a "update" -d 'Updates the vfd tool'
 complete -c vfd -n "__fish_seen_subcommand_from help; and not __fish_seen_subcommand_from up; and not __fish_seen_subcommand_from down; and not __fish_seen_subcommand_from ps; and not __fish_seen_subcommand_from restart; and not __fish_seen_subcommand_from logs; and not __fish_seen_subcommand_from list; and not __fish_seen_subcommand_from git; and not __fish_seen_subcommand_from update; and not __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c vfd -n "__fish_seen_subcommand_from help; and __fish_seen_subcommand_from git; and not __fish_seen_subcommand_from status; and not __fish_seen_subcommand_from pull; and not __fish_seen_subcommand_from push" -f -a "status"
