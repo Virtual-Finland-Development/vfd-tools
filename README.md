@@ -8,7 +8,7 @@ A script for contolling docker-compose files located in separate vfd-project fol
 
 #### **Build requirements**
 
-The script is written in Rust but and needs to be compiled with the Rust toolchain, but for convenience a makefile with a dockerized build environment is provided and as such the only requirement is to have `docker` and `make` installed:
+The script is written in Rust and needs to be compiled with the Rust toolchain, but for convenience a makefile with a dockerized build environment is provided and as such the only requirement is to have `docker` and `make` installed:
 
 - docker - https://docs.docker.com/get-docker/
 - make - https://www.gnu.org/software/make/
