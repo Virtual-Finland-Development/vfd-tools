@@ -4,3 +4,4 @@ bin
 .state
 .builds
 .idea
+scripts/generated

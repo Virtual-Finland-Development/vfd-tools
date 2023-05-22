@@ -86,13 +86,24 @@ pub fn resolve_service_exposed_infos(settings: &Settings, service: &str) -> Vec<
         "docker compose -f {}/{}/docker-compose.yml ps --format json",
         projects_root_path, service
     ));
-    let json_obj = serde_json::from_str::<serde_json::Value>(output.as_str()).unwrap();
+    let json_obj = serde_json::from_str::<serde_json::Value>(output.as_str())
+        .expect("Failed to parse service output");
 
     // Output arrays
     let mut ports: Vec<String> = Vec::new();
     let mut service_names: Vec<String> = Vec::new();
 
-    for container in json_obj.as_array().unwrap() {
+    for container_value in json_obj.as_array().unwrap() {
+        let container = container_value
+            .as_object()
+            .expect("Failed to parse service container output");
+        if !container.contains_key("Project")
+            || !container.contains_key("Service")
+            || !container.contains_key("Publishers")
+        {
+            break;
+        }
+
         let project_name = container["Project"].to_string().replace('\"', "");
 
         if project_name != service {
@@ -104,7 +115,9 @@ pub fn resolve_service_exposed_infos(settings: &Settings, service: &str) -> Vec<
         }
 
         let service_name = container["Service"].to_string().replace('\"', "");
-        let container_publishers = container["Publishers"].as_array().unwrap();
+        let container_publishers = container["Publishers"]
+            .as_array()
+            .expect("Failed to parse service publishers output");
         for publisher in container_publishers {
             let port = publisher["PublishedPort"].to_string().replace('\"', "");
             if port == "0" {
