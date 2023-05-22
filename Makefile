@@ -95,6 +95,7 @@ create-build-link: prepare-build-target
 
 create-auto-completes:
 	@echo "> Generating auto-completes..."
+	@mkdir -p ./scripts/generated
 	@./bin/vfd --generate-autocomplete zsh > ./scripts/generated/autocomplete.zsh
 	@./bin/vfd --generate-autocomplete bash > ./scripts/generated/autocomplete.bash
 	@./bin/vfd --generate-autocomplete fish > ./scripts/generated/autocomplete.fish
