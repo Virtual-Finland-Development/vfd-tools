@@ -40,6 +40,7 @@ install: prepare-build-target ensure-builds-folder
 		if echo "$(PRE_BUILD_TARGETS)" | grep -qw "$(TARGET)" ; then \
 			echo "> Downloading the pre-built vfd-tools binary..."; \
 			docker run --rm \
+				--user $(shell id -u):$(shell id -g) \
 				-v $(shell pwd):/vfd-tools -w /vfd-tools \
 				alpine sh -c '\
 				wget -q $(VFD_RELEASE_ASSETS_URI)/version-hash.md5 -P ./.builds && \
