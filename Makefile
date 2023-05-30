@@ -131,7 +131,7 @@ clean-build:
 	docker rmi $(BUILDER_IMAGE) || true
 	docker rmi $(DARWIN_BUILDER_IMAGE) || true
 
-store-build-hash:
+store-build-hash: ensure-builds-folder
 	@echo "> Storing the build hash..."
 	@$(shell make -s generate-build-hash > ./.builds/version-hash.md5)
 	@echo "> Stored: $(shell cat ./.builds/version-hash.md5)"
