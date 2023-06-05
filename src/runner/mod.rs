@@ -93,8 +93,8 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
         Some(Commands::Update {}) => {
             runner_app::self_update(settings.clone());
         }
-        Some(Commands::Version {}) => {
-            runner_app::print_version();
+        Some(Commands::BuildInfo {}) => {
+            runner_app::print_build_info();
         }
         None => {}
     }

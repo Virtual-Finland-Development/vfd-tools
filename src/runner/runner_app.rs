@@ -112,7 +112,7 @@ pub async fn print_service_infos(settings: Settings) {
     }
 }
 
-pub fn print_version() {
+pub fn print_build_info() {
     let version = env!("CARGO_PKG_VERSION");
     println!(
         "Version: {}, Architechture: {}",

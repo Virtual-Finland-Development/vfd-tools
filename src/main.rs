@@ -64,8 +64,8 @@ enum Commands {
     },
     #[command(about = "Updates the vfd tool", visible_alias = "self-update")]
     Update {},
-    #[command(about = "Prints the version")]
-    Version {},
+    #[command(about = "Prints build information")]
+    BuildInfo {},
 }
 
 #[derive(Subcommand)]
