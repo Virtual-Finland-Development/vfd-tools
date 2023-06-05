@@ -45,7 +45,7 @@
           },
           {
             "key": "arch",
-            "value": "arm"
+            "value": "aarch64"
           }
         ]
       }
