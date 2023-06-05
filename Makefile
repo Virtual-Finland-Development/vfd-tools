@@ -56,7 +56,7 @@ install: prepare-build-target ensure-builds-folder
 		fi; \
 		make create-build-link; \
 		make create-auto-completes; \
-	elif [ "$(shell make check-build-hash)" != "$(shell make generate-build-hash)" ]; then \
+	elif [ "$(shell make check-build-hash)" != "$(shell make check-published-build-hash)" ]; then \
 		echo "> Update available! To update run 'vfd update'"; \
 	fi
 
