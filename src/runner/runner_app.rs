@@ -111,3 +111,12 @@ pub async fn print_service_infos(settings: Settings) {
         println!("No traefik hosts found");
     }
 }
+
+pub fn print_version() {
+    let version = env!("CARGO_PKG_VERSION");
+    println!(
+        "Version: {}, Architechture: {}",
+        version,
+        std::env::consts::ARCH
+    );
+}
