@@ -82,6 +82,11 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             commander.run("git", "push");
         }
         Some(Commands::Git {
+            command: GitCommands::Clone {},
+        }) => {
+            commander.run("git", "clone");
+        }
+        Some(Commands::Git {
             command: GitCommands::External(args),
         }) => {
             let args = args

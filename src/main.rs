@@ -73,6 +73,7 @@ enum GitCommands {
     Status {},
     Pull {},
     Push {},
+    Clone {},
     #[command(external_subcommand)]
     External(Vec<OsString>),
 }
