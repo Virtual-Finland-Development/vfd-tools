@@ -7,18 +7,20 @@ pub fn run_action(settings: &Settings, service: &str, command: &str) {
     let formatted_runner_path = runner_app::format_runner_path(projects_root_path.clone());
     let mut command_actual = command.to_string();
     let mut environment_variables_mapping: Vec<(String, String)> = Vec::new();
+    let (service_actual, docker_compose_file) = resolve_service_and_docker_compose_file(service);
 
     if command.starts_with("up") {
         if settings
             .docker_compose_overrides
             .always_rebuild
-            .contains(&service.to_string())
+            .contains(&service_actual.to_string())
             && !command.contains("--build")
         {
             command_actual = format!("{} --build", command);
         }
 
-        environment_variables_mapping = resolve_environment_values_mapping(settings, service);
+        environment_variables_mapping =
+            resolve_environment_values_mapping(settings, service_actual.as_str());
     }
 
     let mut environment_variables_injection = String::new();
@@ -30,15 +32,24 @@ pub fn run_action(settings: &Settings, service: &str, command: &str) {
             );
         }
     }
+
+    let mut print_compose_file_prefix = String::new();
+    if docker_compose_file != "docker-compose.yml" {
+        print_compose_file_prefix = format!("-f {} ", docker_compose_file);
+    }
     println!(
-        "> {}{} → {}docker compose {}",
-        formatted_runner_path, service, environment_variables_injection, command_actual
+        "> {}{} → {}docker compose {}{}",
+        formatted_runner_path,
+        service_actual,
+        environment_variables_injection,
+        print_compose_file_prefix,
+        command_actual
     );
 
     runner_app::run_command(
         &format!(
-            "docker compose -f {}/{}/docker-compose.yml {}",
-            projects_root_path, service, command_actual
+            "docker compose -f {}/{}/{} {}",
+            projects_root_path, service_actual, docker_compose_file, command_actual
         ),
         false,
         Some(environment_variables_mapping),
@@ -135,4 +146,21 @@ pub fn resolve_service_exposed_infos(settings: &Settings, service: &str) -> Vec<
     }
 
     hosts_with_service_ports
+}
+
+fn resolve_service_and_docker_compose_file(service: &str) -> (String, String) {
+    let mut service_actual = service.to_string();
+    let mut docker_compose_file = "docker-compose.yml".to_string();
+
+    if service.contains(':') {
+        let service_parts: Vec<&str> = service.split(':').collect();
+        service_actual = service_parts[0].to_string();
+        docker_compose_file = service_parts[1].to_string();
+    }
+
+    if !docker_compose_file.ends_with(".yml") {
+        panic!("docker-compose file must end with .yml");
+    }
+
+    (service_actual, docker_compose_file)
 }
