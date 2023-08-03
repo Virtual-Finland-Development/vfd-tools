@@ -13,14 +13,14 @@ pub fn run_action(settings: &Settings, service: &str, command: &str) {
         if settings
             .docker_compose_overrides
             .always_rebuild
-            .contains(&service_actual.to_string())
+            .contains(&service_actual)
             && !command.contains("--build")
         {
             command_actual = format!("{} --build", command);
         }
 
         environment_variables_mapping =
-            resolve_environment_values_mapping(settings, service_actual.as_str());
+            resolve_environment_values_mapping(settings, &service_actual);
     }
 
     let mut environment_variables_injection = String::new();
