@@ -87,7 +87,7 @@ vfd list
 Bring specific service profiles up:
 
 ```shell
-vfd up --profiles virtual-finland
+vfd up --profiles access-finland
 ```
 
 Bring specific services up:
