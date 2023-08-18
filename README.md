@@ -102,6 +102,42 @@ Tail the logs of a specific docker compose service in a project:
 vfd logs --services=authentication-gw authgw -f
 ```
 
+#### Configuration
+
+The `vfd` script can be configured with a `settings.json` file located in the `vfd-tools` root directory. 
+
+The following settings are available:
+
+- profiles - a list of service profiles known to the script
+  - services - a list of services known to the profile
+    - syntax: `service[:docker-compose-file.yml, compose-service1, service2]`
+- dockerComposeOverrides - undocumented docker-compose file override configurations
+
+example:
+
+```
+"profiles": [
+    {
+      "name": "mvp",
+      "services": [
+          "virtual-finland:docker-compose.mvp-dev.yml",
+          "codesets:codesets,escoApi",  
+          "users-api"
+       ]
+    },
+]
+```
+
+explanation:
+
+- in profile "mvp", services:
+  - "virtual-finland" is defined in "docker-compose.mvp-dev.yml" file
+    - only one yml-file can be specified and it must be the first item in the comma separated list
+  - "codesets" is defined in the default "docker-compose.yml" file
+    - from the docker compose file, only the "codesets" and "escoApi" services will be brought up
+  - "users-api" is defined in the default "docker-compose.yml" file
+
+
 ## Traefik setup
 
 By default the `vfd` -script will use [traefik](https://github.com/traefik/traefik) as a reverse proxy for the services. For example, the `access-to-finland-demo-front` service will be available at `http://app-access-to-finland-demo-front.localhost` after bringing up the services.

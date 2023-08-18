@@ -19,7 +19,13 @@ pub async fn run(cli: &CliArguments, settings: Settings) -> Result<()> {
             runner_app::ensure_docker_network();
 
             if !*no_state {
-                state::store(settings.clone());
+                let previous_state_settings = state::read(settings.clone());
+                if let Some(previous_state_settings) = previous_state_settings {
+                    let merged_settings = merge_settings(settings.clone(), previous_state_settings);
+                    state::store(merged_settings);
+                } else {
+                    state::store(settings.clone());
+                }
             }
 
             if !*no_traefik {
@@ -130,4 +136,28 @@ fn override_state_with_previous_if_none_set(
             commander.set_settings(state_settings);
         }
     }
+}
+
+fn merge_settings(settings: Settings, previous_state_settings: Settings) -> Settings {
+    let mut merged_settings = settings;
+    // Append previous state profiles and services to the current one
+    for previous_profile in previous_state_settings.profiles {
+        let current_profile = merged_settings
+            .profiles
+            .iter_mut()
+            .find(|p| p.name == previous_profile.name);
+
+        if let Some(current_profile) = current_profile {
+            let mut current_services = current_profile.services.clone();
+            let previous_profile_services = previous_profile.services.clone();
+            for previous_profile_service_name in previous_profile_services {
+                if !current_services.contains(&previous_profile_service_name) {
+                    current_services.push(previous_profile_service_name);
+                }
+            }
+        } else {
+            merged_settings.profiles.push(previous_profile);
+        }
+    }
+    merged_settings
 }
