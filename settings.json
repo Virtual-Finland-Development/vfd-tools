@@ -17,10 +17,10 @@
     },
     {
       "name": "mvp",
-      "services": ["virtual-finland:docker-compose.mvp-dev.yml", "codesets", "users-api"]
-    },
+      "services": ["access-finland:docker-compose.mvp-dev.yml", "codesets", "users-api"]
+    },ö
     {
-      "name": "virtual-finland",
+      "name": "access-finland",
       "services": ["authentication-gw", "testbed-api", "virtual-finland", "codesets", "prh-mock", "users-api"]
     },
     {
