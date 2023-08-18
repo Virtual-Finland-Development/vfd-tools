@@ -18,7 +18,7 @@
     {
       "name": "mvp",
       "services": ["access-finland:docker-compose.mvp-dev.yml", "codesets", "users-api"]
-    },ö
+    },
     {
       "name": "access-finland",
       "services": ["authentication-gw", "testbed-api", "virtual-finland", "codesets", "prh-mock", "users-api"]
