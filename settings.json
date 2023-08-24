@@ -17,27 +17,62 @@
     },
     {
       "name": "mvp",
-      "services": ["access-finland:docker-compose.mvp-dev.yml", "codesets", "users-api"]
+      "services": [
+        "access-finland:docker-compose.mvp-dev.yml",
+        "codesets",
+        "users-api"
+      ]
     },
     {
       "name": "access-finland",
-      "services": ["authentication-gw", "testbed-api", "virtual-finland", "codesets", "prh-mock", "users-api"]
+      "services": [
+        "authentication-gw",
+        "testbed-api",
+        "access-finland",
+        "codesets",
+        "prh-mock",
+        "users-api"
+      ]
     },
     {
       "name": "virtual-finland-demo",
-      "services": ["authentication-gw", "testbed-api", "virtual-finland-demo", "codesets", "prh-mock", "users-api"]
+      "services": [
+        "authentication-gw",
+        "testbed-api",
+        "virtual-finland-demo",
+        "codesets",
+        "prh-mock",
+        "users-api"
+      ]
     },
     {
       "name": "external-service-demo",
-      "services": ["authentication-gw", "users-api", "testbed-api", "external-service-demo", "status-info-api", "status-admin", "codesets"]
+      "services": [
+        "authentication-gw",
+        "users-api",
+        "testbed-api",
+        "external-service-demo",
+        "status-info-api",
+        "status-admin",
+        "codesets"
+      ]
     },
     {
       "name": "status-admin",
-      "services": ["authentication-gw", "status-info-api", "status-admin"]
+      "services": [
+        "authentication-gw",
+        "status-info-api",
+        "status-admin"
+      ]
     }
   ],
   "dockerComposeOverrides": {
-    "alwaysRebuild": ["users-api", "prh-mock", "tmt-productizer", "JobsInFinland.Api.Productizer"],
+    "alwaysRebuild": [
+      "users-api",
+      "prh-mock",
+      "tmt-productizer",
+      "JobsInFinland.Api.Productizer"
+    ],
     "environment": [
       {
         "key": "USERAPI_DOCKERFILE",
