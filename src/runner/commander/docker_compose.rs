@@ -103,19 +103,31 @@ pub fn resolve_service_exposed_infos(settings: &Settings, service: &str) -> Vec<
     let mut hosts_with_service_ports: Vec<(String, String)> = Vec::new();
 
     let projects_root_path = settings.projects_root_path.clone();
+    let (service_actual, docker_compose_file, _) = resolve_service_and_docker_compose_file(service);
 
-    let output = runner_app::get_command_output(&format!(
-        "docker compose -f {}/{}/docker-compose.yml ps --format json",
-        projects_root_path, service
+    let mut output = runner_app::get_command_output(&format!(
+        "docker compose -f {}/{}/{} ps --format json",
+        projects_root_path, service_actual, docker_compose_file
     ));
-    let json_obj = serde_json::from_str::<serde_json::Value>(output.as_str())
-        .expect("Failed to parse service output");
+
+    // Fix for docker compose bug that returns array values as strings separated by newlines (on some platforms)
+    if !output.starts_with("[\"") && !output.ends_with("\"]") && output.contains("{\"Command\":") {
+        output = format!("[{}]", output.replace('\n', ","));
+        // Replace last trailing comma with empty string
+        output = output[..output.len() - 2].to_string() + "]";
+    }
+
+    let json_obj = serde_json::from_str::<serde_json::Value>(output.as_str());
+    if json_obj.is_err() {
+        println!("DEBUG: resolve_service_exposed_ports(): {}", output);
+        exit(1);
+    }
 
     // Output arrays
     let mut ports: Vec<String> = Vec::new();
     let mut service_names: Vec<String> = Vec::new();
 
-    for container_value in json_obj.as_array().unwrap() {
+    for container_value in json_obj.unwrap().as_array().unwrap() {
         let container = container_value
             .as_object()
             .expect("Failed to parse service container output");
