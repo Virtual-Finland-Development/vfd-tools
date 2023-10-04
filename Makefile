@@ -106,8 +106,10 @@ build-binaries: build-vfd-tools-builder
 	@echo "> Building the pre-built binaries..."
 	@set -e
 	@for BUILD_TARGET in $(PRE_BUILD_TARGETS); do \
-        echo "Building vfd for $$BUILD_TARGET..."; \
+        @echo "Building vfd for $$BUILD_TARGET..."; \
         make build-vfd-tools TARGET=$$BUILD_TARGET; \
+		@echo "> Cleaning up the build cache..."; \
+		rm -rf ./target/$$BUILD_TARGET || true; \
     done
 
 create-release-archive-files: store-build-hash build-binaries
