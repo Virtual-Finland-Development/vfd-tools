@@ -11,6 +11,7 @@
         "status-info-api",
         "status-admin",
         "codesets",
+        "esco-api",
         "tmt-productizer",
         "JobsInFinland.Api.Productizer"
       ]
@@ -20,6 +21,7 @@
       "services": [
         "access-finland:docker-compose.mvp-dev.yml",
         "codesets",
+        "esco-api",
         "users-api"
       ]
     },
@@ -30,6 +32,7 @@
         "testbed-api",
         "access-finland",
         "codesets",
+        "esco-api",
         "prh-mock",
         "users-api"
       ]
@@ -41,6 +44,7 @@
         "testbed-api",
         "virtual-finland-demo",
         "codesets",
+        "esco-api",
         "prh-mock",
         "users-api"
       ]
